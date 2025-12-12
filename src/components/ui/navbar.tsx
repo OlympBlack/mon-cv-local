@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react"; 
-import logo from "../../assets/logo.avif"
+import logo from "../../assets/logo.jpg"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,12 +10,8 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
 
         <div className="flex items-center gap-2">
-          <img 
-            src={logo}  
-            alt="Logo" 
-            className="h-10 w-auto"
-          />
-          <h1>LOCAL</h1>
+          <img src={logo} alt="Logo" className="h-10 w-auto"/>
+          <h1 className="font-bold text-lg">LOCAL</h1>
         </div>
 
         <nav className="hidden md:flex items-center gap-8 text-gray-600 font-medium">
