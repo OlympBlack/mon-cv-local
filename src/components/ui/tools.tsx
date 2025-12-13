@@ -84,7 +84,6 @@ export default function CreativeTools() {
                     className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:translate-x-2"
                   >
                     <div className="flex items-start gap-4">
-                      {/* Icône */}
                       <div
                         className={`${tool.bgColor} rounded-lg p-3 flex-shrink-0`}
                       >
@@ -94,7 +93,6 @@ export default function CreativeTools() {
                         />
                       </div>
 
-                      {/* Contenu */}
                       <div className="flex-1">
                         <h3 className="text-xl font-bold text-gray-900 mb-2">
                           {tool.title}

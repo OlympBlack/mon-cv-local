@@ -1,5 +1,5 @@
 import { FileText, Layout, Download, Play, ArrowRight } from 'lucide-react';
-import video from "../../assets/images/video.mp4"
+// import video from "../../assets/images/video.mp4"
 
 export default function HowItWorks() {
   const steps = [
@@ -82,13 +82,17 @@ export default function HowItWorks() {
               <div className="absolute inset-0 bg-gray-800 flex items-center justify-center">
                   
                 
-                <video 
-                  className="absolute inset-0 w-full h-full object-cover"
-                  controls
-                  poster="/chemin/vers/miniature.jpg"
-                >
-                  <source src={video} type="video/mp4" />
-                </video>
+                <div className="absolute inset-0 w-full h-full">
+                    <iframe
+                        className="w-full h-full"
+                        src="https://www.youtube.com/embed/2LOACxh43ko"
+                        title="YouTube video player"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                    />
+                </div>
+
                
               </div>
             </div>
