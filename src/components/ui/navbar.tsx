@@ -47,7 +47,7 @@ export default function Navbar() {
           <a href="#" className="hover:text-gray-900">Téléchargements</a>
 
           <div className="flex flex-col gap-2 mt-2">
-            <button className="px-4 py-2 border border-purple-600 text-purple-600 rounded-md hover:bg-purple-50">
+            <button className="px-4 py-2 border border-purple-600 text-purple-600 rounded-full hover:bg-purple-50">
               Se connecter
             </button>
             <button className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">
