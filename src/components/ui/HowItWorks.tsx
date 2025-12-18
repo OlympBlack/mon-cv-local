@@ -1,5 +1,5 @@
-import { FileText, Layout, Download, Play, ArrowRight } from 'lucide-react';
-import { Button } from './button';
+import { FileText, Layout, Download, ArrowRight } from 'lucide-react';
+// import { Button } from './button';
 import {motion} from 'motion/react'
 // import video from "../../assets/images/video.mp4"
 
@@ -74,7 +74,7 @@ export default function HowItWorks() {
         </div>
 
         <div className="text-center mt-12">
-          <button className="bg-violet-600  text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors shadow-lg">
+          <button className="bg-violet-600  text-white px-8 py-3 rounded-full font-semibold transition-colors shadow-lg hover:bg-black hover:text-white border border-white">
             Commencer maintenant
           </button>
         </div>

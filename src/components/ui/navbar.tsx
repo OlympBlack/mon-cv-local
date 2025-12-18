@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react"; 
-import logo from "../../assets/images/logo.jpg"
+import logo from "../../assets/images/logo.jpg";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="w-full bg-white shadow">
+    <header className=" w-full bg-white shadow">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
 
         <div className="flex items-center gap-2">
@@ -23,10 +23,10 @@ export default function Navbar() {
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
-          <button className="px-4 py-2 border border-purple-600 text-purple-600 rounded-md hover:bg-purple-50">
+          <button className="px-4 py-2 border border-purple-600 text-purple-600 rounded-full hover:text-white hover:bg-black">
             Se connecter
           </button>
-          <button className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">
+          <button className="px-4 py-2 bg-purple-600 text-white rounded-full hover:text-white hover:bg-black">
             S’inscrire
           </button>
         </div>
