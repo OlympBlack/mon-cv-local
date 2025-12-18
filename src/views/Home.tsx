@@ -13,7 +13,7 @@ export default function Home() {
       <Navbar />
 
       {/* -------hero----------- */}
-      <div className="hero text-white md:flex h-120 flex justify-center items-center">
+      <div className="hero text-white md:flex flex justify-center items-center mt-10">
           <div className="ml-7  mt-5 w-1/2">
             <h1 className="text-4xl font-bold">Faites bonne impression avec votre CV</h1>
             <p className="mt-5">Créez et téléchargez instantanément votre CV professionnel grâce à notre outil de création rapide et facile.</p>
