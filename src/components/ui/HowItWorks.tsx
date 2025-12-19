@@ -26,7 +26,7 @@ export default function HowItWorks() {
     <div className="bg-gray-50 py-16 px-6">
       <div className="max-w-6xl mx-auto">
         
-        <motion.div  initial={false} animate={{ x: 100 }} 
+        <div
          className="text-center mb-16" >
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             Comment ça marche ?
@@ -34,7 +34,7 @@ export default function HowItWorks() {
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Obtenez le CV parfait en trois étapes simples. Entrez vos détails, sélectionnez un modèle et téléchargez !
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid md:grid-cols-3 gap-8 md:gap-16 relative">
           
