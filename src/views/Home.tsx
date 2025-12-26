@@ -52,7 +52,7 @@ export default function Home() {
             </div>
 
           </div>
-          <div className="relative w-[300px] h-[400px] flex items-center justify-center rounded-xl shadow-2xl will-change-transform">
+          <div className="relative w-[300px] h-[400px] flex items-center justify-center rounded-xl shadow-2xl will-change-transform hidden lg:block">
             <img
               src={modeles1}
               alt="image-hero"
@@ -61,7 +61,7 @@ export default function Home() {
             <img
               src={modeles2}
               alt="image-hero"
-              className="absolute h-100 rounded-xl shadow-2xl animate-zigzag-back"
+              className="absolute h-100  rounded-xl shadow-2xl animate-zigzag-back"
             />
           </div>
 
@@ -81,7 +81,7 @@ export default function Home() {
 
             <button className="px-5 py-2 bg-white text-purple-900 rounded-full mt-5 hover:bg-black hover:text-white border border-white">CREATE CV</button>
           </div>
-          <div className=" justify-items-center">
+          <div className=" justify-items-center hidden lg:block">
             <img src={modeles3} alt=""  className="h-70"/>
           </div>
         </div>
