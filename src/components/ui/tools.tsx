@@ -1,5 +1,31 @@
 import { FileText, Mail, Briefcase, Grid } from "lucide-react";
 import cv_template from "../../assets/images/cv_template.jpg";
+import { motion } from "framer-motion";
+
+/* ===== Variants réutilisables ===== */
+const fadeLeft = {
+  hidden: { opacity: 0, x: -50 },
+  visible: { opacity: 1, x: 0 },
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0 },
+};
+
+const listContainer = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.15,
+    },
+  },
+};
+
+const listItem = {
+  hidden: { opacity: 0, x: 30 },
+  visible: { opacity: 1, x: 0 },
+};
 
 export default function CreativeTools() {
   const tools = [
@@ -7,46 +33,47 @@ export default function CreativeTools() {
       icon: FileText,
       title: "CV",
       description:
-        "Générez facilement des CV professionnels et profitez d’une édition illimitée pour des mises à jour en continu.",
-      bgColor: "bg-purple-100",
-      iconColor: "text-purple-600",
+        "Générez facilement des CV professionnels et profitez d’une édition illimitée.",
     },
     {
       icon: Mail,
       title: "Lettre de motivation",
       description:
-        "Créez des lettres de motivation convaincantes qui complètent parfaitement votre CV.",
-      bgColor: "bg-purple-100",
-      iconColor: "text-purple-600",
+        "Créez des lettres de motivation convaincantes qui complètent votre CV.",
     },
     {
       icon: Briefcase,
       title: "Offres d'emploi",
       description:
-        "Trouvez et postulez aux offres d’emploi correspondant à vos compétences et votre expérience.",
-      bgColor: "bg-purple-100",
-      iconColor: "text-purple-600",
+        "Trouvez et postulez aux offres correspondant à vos compétences.",
     },
     {
       icon: Grid,
       title: "Candidatures",
       description:
         "Suivez et gérez toutes vos candidatures en un seul endroit.",
-      bgColor: "bg-purple-100",
-      iconColor: "text-purple-600",
     },
   ];
 
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-purple-50 py-16 px-6">
+    <section className="bg-gradient-to-br from-gray-50 to-purple-50 py-16 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          
-          <div className="relative">
+
+          {/* ===== Aperçu CV ===== */}
+          <motion.div
+            variants={fadeLeft}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
             <div className="bg-white rounded-2xl shadow-2xl overflow-hidden max-w-lg mx-auto">
-              <div className="from-indigo-900 bg-purple-900 px-6 py-4 flex items-center justify-between">
-                <h3 className="text-white text-xl font-semibold">Curriculum vitæ</h3>
-                <button className="w-8 h-8 bg-white/20 rounded flex items-center justify-center text-white hover:bg-white/30 transition-colors">
+              <div className="bg-purple-900 px-6 py-4 flex items-center justify-between">
+                <h3 className="text-white text-xl font-semibold">
+                  Curriculum vitæ
+                </h3>
+                <button className="w-8 h-8 bg-white/20 rounded flex items-center justify-center text-white">
                   ×
                 </button>
               </div>
@@ -61,54 +88,71 @@ export default function CreativeTools() {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
+          {/* ===== Texte + outils ===== */}
           <div>
-            <div className="mb-12">
+            {/* Titre */}
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="mb-12"
+            >
               <h4 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 Essayez Nos Outils Créatifs
               </h4>
               <p className="text-lg text-gray-600 leading-relaxed">
                 Créez instantanément des CV professionnels grâce à notre
-                générateur de CV, parfaitement intégré avec vos outils
-                préférés.
+                générateur parfaitement intégré.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="space-y-6">
+            {/* Liste animée */}
+            <motion.div
+              variants={listContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="space-y-6"
+            >
               {tools.map((tool, index) => {
                 const IconComponent = tool.icon;
                 return (
-                  <div
+                  <motion.div
                     key={index}
-                    className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:translate-x-2"
+                    variants={listItem}
+                    className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300"
                   >
                     <div className="flex items-start gap-4">
-                      <div
-                        className={`${tool.bgColor} rounded-lg p-3 flex-shrink-0`}
-                      >
+                      <div className="bg-purple-100 rounded-lg p-3">
                         <IconComponent
-                          className={`w-6 h-6 ${tool.iconColor}`}
+                          className="w-6 h-6 text-purple-600"
                           strokeWidth={2}
                         />
                       </div>
 
-                      <div className="flex-1">
+                      <div>
                         <h3 className="text-xl font-bold text-gray-900 mb-2">
                           {tool.title}
                         </h3>
-                        <p className="text-gray-600 leading-relaxed">
+                        <p className="text-gray-600">
                           {tool.description}
                         </p>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })}
-            </div>
+            </motion.div>
+
+            
+           
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

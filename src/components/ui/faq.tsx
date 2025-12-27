@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-const Accordion = ({ children, type, className }: any) => {
+const Accordion = ({ children, className }: any) => {
   const [openItem, setOpenItem] = useState<string | null>(null);
 
   return (
@@ -19,7 +20,7 @@ const Accordion = ({ children, type, className }: any) => {
 
 const AccordionItem = ({ value, children, isOpen, onToggle }: any) => {
   return (
-    <div data-value={value} className="border-b border-gray-300">
+    <div data-value={value} className="border-b border-gray-300 last:border-none">
       {React.Children.map(children, child =>
         React.cloneElement(child, { isOpen, onToggle })
       )}
@@ -55,16 +56,44 @@ const AccordionContent = ({ children, className, isOpen }: any) => {
 };
 
 export default function FAQ() {
+  const faqItems = [
+    {
+      question: 'Comment créer mon CV professionnel ?',
+      answer:
+        'Une fois inscrit, vous accédez à notre générateur de CV intuitif. Choisissez un modèle, remplissez vos informations, et notre IA vous aide à optimiser votre contenu.',
+    },
+    {
+      question: 'Les modèles de CV sont-ils gratuits ?',
+      answer: 'Oui, nous proposons plusieurs modèles gratuits. Des modèles premium sont aussi disponibles.',
+    },
+    {
+      question: 'Puis-je télécharger mon CV en PDF ?',
+      answer: 'Oui, vous pouvez télécharger votre CV en PDF haute qualité.',
+    },
+    {
+      question: "L'IA peut-elle m'aider à améliorer mon contenu ?",
+      answer: 'Oui, notre IA analyse votre CV et propose des améliorations personnalisées.',
+    },
+    {
+      question: 'Puis-je créer plusieurs versions de mon CV ?',
+      answer: 'Bien sûr ! Vous pouvez créer plusieurs versions selon vos besoins.',
+    },
+  ];
+
   return (
     <section className="w-full py-16 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-14">
 
           {/* Left Column */}
-          <div className="flex flex-col gap-5">
-            <h2 className="text-3xl font-bold mb-2 leading-tight">
-              Questions fréquentes
-            </h2>
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7 }}
+            viewport={{ once: true }}
+            className="flex flex-col gap-5"
+          >
+            <h2 className="text-3xl font-bold mb-2 leading-tight">Questions fréquentes</h2>
 
             <div className="p-6 rounded-xl bg-[#D5DBE5] flex items-start gap-4">
               <div className="w-10 h-10 rounded-full border-2 border-black flex items-center justify-center flex-shrink-0">
@@ -101,62 +130,34 @@ export default function FAQ() {
                 <p className="text-gray-700 text-sm">Échange individuel avec un expert.</p>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Column - Accordion */}
-          <div className="flex flex-col justify-start pt-10">
-            <Accordion type="single" collapsible className="w-full">
-
-              <AccordionItem value="item-1">
-                <AccordionTrigger className="text-gray-900 text-lg">
-                  Comment créer mon CV professionnel ?
-                </AccordionTrigger>
-                <AccordionContent className="text-gray-700 text-sm leading-relaxed">
-                  Une fois inscrit, vous accédez à notre générateur de CV intuitif. 
-                  Choisissez un modèle, remplissez vos informations, et notre IA vous aide 
-                  à optimiser votre contenu.
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="item-2">
-                <AccordionTrigger className="text-gray-900 text-lg">
-                  Les modèles de CV sont-ils gratuits ?
-                </AccordionTrigger>
-                <AccordionContent className="text-gray-700 text-sm leading-relaxed">
-                  Oui, nous proposons plusieurs modèles gratuits. 
-                  Des modèles premium sont aussi disponibles.
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="item-3">
-                <AccordionTrigger className="text-gray-900 text-lg">
-                  Puis-je télécharger mon CV en PDF ?
-                </AccordionTrigger>
-                <AccordionContent className="text-gray-700 text-sm leading-relaxed">
-                  Oui, vous pouvez télécharger votre CV en PDF haute qualité.
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="item-4">
-                <AccordionTrigger className="text-gray-900 text-lg">
-                  L'IA peut-elle m'aider à améliorer mon contenu ?
-                </AccordionTrigger>
-                <AccordionContent className="text-gray-700 text-sm leading-relaxed">
-                  Oui, notre IA analyse votre CV et propose des améliorations personnalisées.
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="item-5">
-                <AccordionTrigger className="text-gray-900 text-lg">
-                  Puis-je créer plusieurs versions de mon CV ?
-                </AccordionTrigger>
-                <AccordionContent className="text-gray-700 text-sm leading-relaxed">
-                  Bien sûr ! Vous pouvez créer plusieurs versions selon vos besoins.
-                </AccordionContent>
-              </AccordionItem>
-
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7 }}
+            viewport={{ once: true }}
+          >
+            <Accordion className="w-full space-y-2">
+              {faqItems.map((item, index) => (
+                <AccordionItem key={index} value={`item-${index}`}>
+                  <AccordionTrigger className="text-gray-900 text-lg">
+                    {item.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-gray-700 text-sm leading-relaxed">
+                    <motion.div
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: 0.05 }}
+                    >
+                      {item.answer}
+                    </motion.div>
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
             </Accordion>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

@@ -1,14 +1,21 @@
 import { Github, Twitter, Instagram, Linkedin } from "lucide-react";
-import logo from "../../assets/images/logo.jpg"
+import logo from "../../assets/images/logo.jpg";
+import { motion } from "framer-motion";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#1a0b3f] text-white py-10 rounded-lg m-2">
+    <motion.footer
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7 }}
+      viewport={{ once: true }}
+      className="bg-[#1a0b3f] text-white py-10 rounded-lg m-2"
+    >
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
 
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2">
-            <img src={logo}  alt="Logo" className="h-10 w-auto"/>
+            <img src={logo} alt="Logo" className="h-10 w-auto"/>
             <span className="font-bold text-lg">LOCAL</span>
           </div>
           <p className="text-gray-300 text-sm">
@@ -55,9 +62,8 @@ export default function Footer() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 mt-10 border-t border-gray-700 pt-4 text-gray-400 text-sm text-center">
-            © {new Date().getFullYear()} CV Local, Tous droits réservés
+        © {new Date().getFullYear()} CV Local, Tous droits réservés
       </div>
-
-    </footer>
+    </motion.footer>
   );
 }

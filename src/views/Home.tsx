@@ -56,7 +56,7 @@ export default function Home() {
             </motion.div>
 
           </div>
-          <div className="relative w-[300px] h-[400px] flex items-center justify-center rounded-xl shadow-2xl will-change-transform hidden lg:block">
+          <motion.div initial={{opacity: 0, x: 50}} animate={{opacity: 1, x: 0}} transition={{duration: 2, ease: "easeOut"}} className="relative w-[300px] h-[400px] flex items-center justify-center rounded-xl shadow-2xl will-change-transform hidden lg:block">
             <img
               src={modeles1}
               alt="image-hero"
@@ -67,7 +67,7 @@ export default function Home() {
               alt="image-hero"
               className="absolute h-100  rounded-xl shadow-2xl animate-zigzag-back"
             />
-          </div>
+          </motion.div>
 
 
         </div>
@@ -75,19 +75,20 @@ export default function Home() {
       <div className="max-w-6xl mx-auto px-6">
         <HowItWorks />
         <CreativeTools />
-        <Testimonials />
+        {/* <Testimonials /> */}
         <FAQ />
 
         <div className="bg-purple-900 text-white md:flex rounded-xl mb-15 mx-auto flex justify-center items-center">
-          <div className="ml-7  mt-5 lg:w-1/2 m-5 text-center">
+          <motion.div initial={{opacity: 0, x: -50}} whileInView={{opacity: 1, x: 0}} transition={{duration: 1, ease:"easeOut"}} viewport={{once:false}} className="ml-7  mt-5 lg:w-1/2 m-5 text-center">
             <h1 className="text-4xl font-bold">Faites bonne impression avec votre CV</h1>
             <p className="mt-5">Créez et téléchargez instantanément votre CV professionnel grâce à notre outil de création rapide et facile.</p>
 
             <button className="px-5 py-2 bg-white text-purple-900 rounded-full mt-5 hover:bg-black hover:text-white border border-white">CREATE CV</button>
-          </div>
-          <div className=" justify-items-center hidden lg:block">
+          </motion.div>
+
+          <motion.div initial={{opacity: 0, x: 50}} whileInView={{opacity: 1, x: 0}} transition={{duration: 1, ease:"easeOut"}} viewport={{once: false}} className=" justify-items-center hidden lg:block">
             <img src={modeles3} alt=""  className="h-70"/>
-          </div>
+          </motion.div>
         </div>
       </div>
       <Footer />
