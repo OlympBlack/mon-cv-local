@@ -1,50 +1,92 @@
-import { FileText, Layout, Download, ArrowRight } from 'lucide-react';
-// import { Button } from './button';
-import {motion} from 'motion/react'
-// import video from "../../assets/images/video.mp4"
+import { FileText, Layout, Download, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
+
+const container = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.5
+    }
+  }
+};
+
+const item = {
+  hidden: { opacity: 0, y: 30 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: "easeOut" }
+  }
+};
 
 export default function HowItWorks() {
   const steps = [
     {
       icon: FileText,
       title: "Entrez vos détails",
-      description: "Commencez par remplir les sections pertinentes qui constituent le contenu de votre CV."
+      description:
+        "Commencez par remplir les sections pertinentes qui constituent le contenu de votre CV."
     },
     {
       icon: Layout,
       title: "Sélectionnez un modèle",
-      description: "Choisissez un modèle et personnalisez votre CV en fonction de votre style et de votre personnalité."
+      description:
+        "Choisissez un modèle et personnalisez votre CV en fonction de votre style et de votre personnalité."
     },
     {
       icon: Download,
       title: "Téléchargez votre CV",
-      description: "Téléchargez votre CV rapidement et modifiez-le à tout moment."
+      description:
+        "Téléchargez votre CV rapidement et modifiez-le à tout moment."
     }
   ];
 
   return (
     <div className="bg-gray-50 py-16 px-6">
       <div className="max-w-6xl mx-auto">
-        
-        <div
-         className="text-center mb-16" >
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Comment ça marche ?
-          </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Obtenez le CV parfait en trois étapes simples. Entrez vos détails, sélectionnez un modèle et téléchargez !
-          </p>
-        </div>
 
-        <div className="grid md:grid-cols-3 gap-8 md:gap-16 relative">
-          
+        {/* TITRE */}
+        <motion.div
+          className="text-center mb-16"
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          variants={container}
+        >
+          <motion.h2
+            variants={item}
+            className="text-4xl md:text-5xl font-bold text-gray-900 mb-4"
+          >
+            Comment ça marche ?
+          </motion.h2>
+
+          <motion.p
+            variants={item}
+            className="text-lg text-gray-600 max-w-3xl mx-auto"
+          >
+            Obtenez le CV parfait en trois étapes simples. Entrez vos détails,
+            sélectionnez un modèle et téléchargez !
+          </motion.p>
+        </motion.div>
+
+        {/* STEPS */}
+        <motion.div
+          className="grid md:grid-cols-3 gap-8 md:gap-16 relative"
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          variants={container}
+        >
           {steps.map((step, index) => {
             const IconComponent = step.icon;
-            return (
-              <div key={index} className="relative hover:border hover:border-purple-600 hover:rounded-xl">
 
+            return (
+              <motion.div
+                key={index}
+                variants={item}
+                className="relative hover:border hover:border-purple-600 hover:rounded-xl"
+              >
                 <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300 h-full">
-                  
                   <div className="mb-6">
                     <div className="w-16 h-16 bg-purple-100 rounded-lg flex items-center justify-center">
                       <IconComponent className="w-8 h-8 text-purple-600" strokeWidth={2} />
@@ -68,42 +110,45 @@ export default function HowItWorks() {
                     <ArrowRight className="w-8 h-8 text-purple-300" strokeWidth={2} />
                   </div>
                 )}
-              </div>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
 
-        <div className="text-center mt-12">
-          <button className="bg-violet-600  text-white px-8 py-3 rounded-full font-semibold transition-colors shadow-lg hover:bg-black hover:text-white border border-white">
+        {/* BUTTON */}
+        <motion.div
+          className="text-center mt-12"
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+        >
+          <button className="bg-violet-600 text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:bg-black hover:text-white border border-white">
             Commencer maintenant
           </button>
-        </div>
-          {/* <Button variant="perso"  className='' > Postuler mainy</Button> */}
+        </motion.div>
 
-
-        <div className="mt-16 max-w-2xl mx-auto">
+        {/* VIDEO */}
+        <motion.div
+          className="mt-16 max-w-2xl mx-auto"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
           <div className="relative bg-gray-900 rounded-xl shadow-lg overflow-hidden">
-            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-              <div className="absolute inset-0 bg-gray-800 flex items-center justify-center">
-                  
-                
-                <div className="absolute inset-0 w-full h-full">
-                    <iframe
-                        className="w-full h-full"
-                        src="https://www.youtube.com/embed/2LOACxh43ko"
-                        title="YouTube video player"
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                    />
-                </div>
-                
-
-               
-              </div>
+            <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
+              <iframe
+                className="absolute inset-0 w-full h-full"
+                src="https://www.youtube.com/embed/2LOACxh43ko"
+                title="YouTube video player"
+                frameBorder="0"
+                allowFullScreen
+              />
             </div>
           </div>
-        </div>
+        </motion.div>
+
       </div>
     </div>
   );

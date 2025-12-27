@@ -19,7 +19,7 @@ export default function Navbar() {
           <a href="#" className="hover:text-gray-900">Modèles</a>
           {/* <a href="#" className="hover:text-gray-900">Tarifs</a> */}
           <a href="#" className="hover:text-gray-900">FAQ</a>
-          <a href="#" className="hover:text-gray-900">Téléchargements</a>
+          <a href="#" className="hover:text-gray-900">About</a>
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
