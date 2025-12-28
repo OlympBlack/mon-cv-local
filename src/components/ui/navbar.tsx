@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react"; 
 import logo from "../../assets/images/logo.jpg";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,11 +16,12 @@ export default function Navbar() {
         </div>
 
         <nav className="hidden md:flex items-center gap-8 text-gray-600 font-medium">
-          <a href="#" className="text-purple-600 border-b-2 border-purple-600 pb-1">Accueil</a>
-          <a href="#" className="hover:text-gray-900">Modèles</a>
+          <Link to="/" className="text-purple-600 border-b-2 border-purple-600 pb-1">Accueil</Link>
+          <Link to="#" className="hover:text-gray-900">Modèles</Link>
           {/* <a href="#" className="hover:text-gray-900">Tarifs</a> */}
-          <a href="#" className="hover:text-gray-900">FAQ</a>
-          <a href="#" className="hover:text-gray-900">About</a>
+          <Link to="/faq" className="hover:text-gray-900">FAQ</Link>
+
+          <Link to="#" className="hover:text-gray-900">About</Link>
         </nav>
 
         <div className="hidden md:flex items-center gap-3">

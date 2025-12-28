@@ -1,5 +1,6 @@
 import { ReactElement } from "react";
 import Home from "./views/Home";
+import Faq from "./views/Faq";
 
 export interface AppRoute{
     path: string;
@@ -10,6 +11,10 @@ const routes: AppRoute[] = [
     {
         path: "/",
         element: <Home />
+    }, 
+    {
+        path: "faq",
+        element: <Faq />
     }
 ];
 
