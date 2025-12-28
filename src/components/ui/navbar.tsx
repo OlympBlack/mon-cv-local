@@ -12,6 +12,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
 
         <div className="flex items-center gap-2">
+          <h1 className="font-bold text-lg">MON</h1>
           <img src={logo} alt="Logo" className="h-10 w-auto" />
           <h1 className="font-bold text-lg">LOCAL</h1>
         </div>
@@ -20,7 +21,7 @@ export default function Navbar() {
           <Link to="/" className={location.pathname === "/" ? "text-purple-600 border-b-2 border-purple-600 pb-1" : "hover:text-gray-900"}>Accueil</Link>
           <Link to="#" className="hover:text-gray-900">Modèles</Link>
           <Link to="/faq" className={location.pathname === "/faq" ? "text-purple-600 border-b-2 border-purple-600 pb-1" : "hover:text-gray-900"}>FAQ</Link>
-          <Link to="#" className="hover:text-gray-900">About</Link>
+          <Link to="/about" className={location.pathname === "/about" ? "text-purple-600 border-b-2 border-purple-600 pb-1" : "hover:text-gray-900"}>About</Link>
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
@@ -44,7 +45,7 @@ export default function Navbar() {
           <Link to="/" className={location.pathname === "/" ? "text-purple-600 border-b-2 border-purple-600 pb-1" : "hover:text-gray-900"}>Accueil</Link>
           <Link to="#" className="hover:text-gray-900">Modèles</Link>
           <Link to="/faq" className={location.pathname === "/faq" ? "text-purple-600 border-b-2 border-purple-600 pb-1" : "hover:text-gray-900"}>FAQ</Link>
-          <Link to="#" className="hover:text-gray-900">About</Link>
+          <Link to="/about" className={location.pathname === "/about" ? "text-purple-600 border-b-2 border-purple-600 pb-1" : "hover:text-gray-900"}>About</Link>
 
           <div className="flex flex-col gap-2 mt-2">
             <button className="px-4 py-2 border border-purple-600 text-purple-600 rounded-full hover:text-white hover:bg-black">
