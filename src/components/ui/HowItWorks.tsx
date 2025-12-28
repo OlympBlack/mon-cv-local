@@ -21,7 +21,7 @@ const item = {
 
 export default function HowItWorks() {
   const steps = [
-    
+
     {
       icon: Layout,
       title: "Sélectionnez un modèle",
@@ -43,7 +43,7 @@ export default function HowItWorks() {
   ];
 
   return (
-    <div className="bg-gray-50 py-16 px-6">
+    <div className="bg-gray-50 dark:bg-black py-16 px-6">
       <div className="max-w-6xl mx-auto">
 
         {/* TITRE */}
@@ -56,14 +56,14 @@ export default function HowItWorks() {
         >
           <motion.h2
             variants={item}
-            className="text-4xl md:text-5xl font-bold text-gray-900 mb-4"
+            className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4"
           >
             Comment ça marche ?
           </motion.h2>
 
           <motion.p
             variants={item}
-            className="text-lg text-gray-600 max-w-3xl mx-auto"
+            className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto"
           >
             Obtenez le CV parfait en trois étapes simples. Entrez vos détails,
             sélectionnez un modèle et téléchargez !
@@ -87,17 +87,17 @@ export default function HowItWorks() {
                 variants={item}
                 className="relative hover:border hover:border-purple-600 hover:rounded-xl"
               >
-                <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300 h-full">
+                <div className="bg-white dark:bg-gray-900 rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300 h-full">
                   <div className="mb-6">
                     <div className="w-16 h-16 bg-purple-100 rounded-lg flex items-center justify-center">
                       <IconComponent className="w-8 h-8 text-purple-600" strokeWidth={2} />
                     </div>
                   </div>
 
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
                     {step.title}
                   </h3>
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                     {step.description}
                   </p>
                 </div>
@@ -125,7 +125,7 @@ export default function HowItWorks() {
           viewport={{ once: true }}
         >
           <button className="bg-violet-600 text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:bg-black hover:text-white border border-white">
-            Commencer maintenant
+            Créer mon CV gratuit
           </button>
         </motion.div>
 
@@ -151,6 +151,6 @@ export default function HowItWorks() {
         </motion.div>
 
       </div>
-    </div>
+    </div >
   );
 }

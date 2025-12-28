@@ -35,7 +35,7 @@ export default function Home() {
               <Input
                 type="text"
                 placeholder="Rechercher une question..."
-                className="py-3 text-lg border-2 focus-visible:ring-black h-auto rounded-full px-6"
+                className="py-3 text-lg border-2 focus-visible:ring-black dark:focus-visible:ring-white h-auto rounded-full px-6"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />

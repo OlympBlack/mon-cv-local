@@ -73,15 +73,15 @@ export default function Testimonials() {
   };
 
   return (
-    <div className="bg-gray-50 py-12 px-4">
+    <div className="bg-gray-50 dark:bg-black py-12 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-10 gap-6">
           <div className="max-w-2xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Ce que disent nos utilisateurs
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Ils ont réussi gratuitement avec MON CV LOCAL
             </h2>
-            <p className="text-base md:text-lg text-gray-600">
+            <p className="text-base md:text-lg text-gray-600 dark:text-gray-300">
               Découvrez les témoignages de professionnels qui ont boosté leur
               carrière grâce à notre générateur de CV.
             </p>
@@ -92,11 +92,10 @@ export default function Testimonials() {
             <button
               onClick={handlePrev}
               disabled={currentIndex === 0}
-              className={`w-10 h-10 md:w-12 md:h-12 rounded-lg border-2 flex items-center justify-center transition-all ${
-                currentIndex === 0
-                  ? "border-gray-300 text-gray-300"
-                  : "border-gray-300 text-gray-600 hover:border-purple-600 hover:text-purple-600"
-              }`}
+              className={`w-10 h-10 md:w-12 md:h-12 rounded-lg border-2 flex items-center justify-center transition-all ${currentIndex === 0
+                ? "border-gray-300 text-gray-300 dark:border-gray-700 dark:text-gray-700"
+                : "border-gray-300 text-gray-600 hover:border-purple-600 hover:text-purple-600 dark:border-gray-600 dark:text-gray-400 dark:hover:border-purple-400 dark:hover:text-purple-400"
+                }`}
             >
               <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
             </button>
@@ -104,11 +103,10 @@ export default function Testimonials() {
             <button
               onClick={handleNext}
               disabled={currentIndex >= maxIndex}
-              className={`w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center transition-all ${
-                currentIndex >= maxIndex
-                  ? "bg-purple-300 text-white"
-                  : "bg-purple-600 text-white hover:bg-purple-700"
-              }`}
+              className={`w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center transition-all ${currentIndex >= maxIndex
+                ? "bg-purple-300 text-white"
+                : "bg-purple-600 text-white hover:bg-purple-700"
+                }`}
             >
               <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
             </button>
@@ -120,24 +118,22 @@ export default function Testimonials() {
           <div
             className="flex transition-transform duration-500 ease-out"
             style={{
-              transform: `translateX(-${
-                currentIndex * (100 / itemsPerPage)
-              }%)`,
+              transform: `translateX(-${currentIndex * (100 / itemsPerPage)
+                }%)`,
             }}
           >
             {testimonials.map((testimonial, index) => (
               <div
                 key={index}
-                className={`flex-shrink-0 px-3 ${
-                  itemsPerPage === 1
-                    ? "w-full"
-                    : itemsPerPage === 2
+                className={`flex-shrink-0 px-3 ${itemsPerPage === 1
+                  ? "w-full"
+                  : itemsPerPage === 2
                     ? "w-1/2"
                     : "w-1/3"
-                }`}
+                  }`}
               >
-                <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm h-full">
-                  <div className="text-5xl text-gray-200 font-serif mb-4">"</div>
+                <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 md:p-8 shadow-sm h-full">
+                  <div className="text-5xl text-gray-200 dark:text-gray-800 font-serif mb-4">"</div>
 
                   <div className="flex items-center gap-4 mb-4">
                     <img
@@ -146,16 +142,16 @@ export default function Testimonials() {
                       className="w-14 h-14 md:w-16 md:h-16 rounded-full object-cover"
                     />
                     <div>
-                      <h3 className="font-bold text-gray-900">
+                      <h3 className="font-bold text-gray-900 dark:text-white">
                         {testimonial.name}
                       </h3>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
                         {testimonial.role}
                       </p>
                     </div>
                   </div>
 
-                  <p className="text-gray-700 text-sm md:text-base mb-4">
+                  <p className="text-gray-700 dark:text-gray-300 text-sm md:text-base mb-4">
                     {testimonial.text}
                   </p>
 
@@ -179,15 +175,14 @@ export default function Testimonials() {
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`h-2 rounded-full transition-all ${
-                index === currentIndex
-                  ? "w-6 bg-purple-600"
-                  : "w-2 bg-gray-300"
-              }`}
+              className={`h-2 rounded-full transition-all ${index === currentIndex
+                ? "w-6 bg-purple-600"
+                : "w-2 bg-gray-300"
+                }`}
             />
           ))}
         </div>
       </div>
-    </div>
+    </div >
   );
 }

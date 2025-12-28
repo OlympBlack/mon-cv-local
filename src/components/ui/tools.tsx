@@ -56,7 +56,7 @@ export default function CreativeTools() {
   ];
 
   return (
-    <section className="bg-gradient-to-br from-gray-50 to-purple-50 py-16 px-6">
+    <section className="bg-gradient-to-br from-gray-50 to-purple-50 dark:from-black dark:to-gray-900 py-16 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
 
@@ -68,7 +68,7 @@ export default function CreativeTools() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <div className="bg-white rounded-2xl shadow-2xl overflow-hidden max-w-lg mx-auto">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden max-w-lg mx-auto">
               <div className="bg-purple-900 px-6 py-4 flex items-center justify-between">
                 <h3 className="text-white text-xl font-semibold">
                   Curriculum vitæ
@@ -78,7 +78,7 @@ export default function CreativeTools() {
                 </button>
               </div>
 
-              <div className="p-6 bg-gray-50">
+              <div className="p-6 bg-gray-50 dark:bg-gray-700">
                 <div className="bg-white rounded-lg shadow-sm p-6 min-h-[500px] flex items-center justify-center">
                   <img
                     src={cv_template}
@@ -101,12 +101,11 @@ export default function CreativeTools() {
               transition={{ duration: 0.7 }}
               className="mb-12"
             >
-              <h4 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Essayez Nos Outils Créatifs
+              <h4 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                Nos Outils 100% Gratuits
               </h4>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Créez instantanément des CV professionnels grâce à notre
-                générateur parfaitement intégré.
+              <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+                Créez instantanément des CV et lettres de motivation professionnels sans aucun frais caché.
               </p>
             </motion.div>
 
@@ -124,7 +123,7 @@ export default function CreativeTools() {
                   <motion.div
                     key={index}
                     variants={listItem}
-                    className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300"
+                    className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300"
                   >
                     <div className="flex items-start gap-4">
                       <div className="bg-purple-100 rounded-lg p-3">
@@ -135,10 +134,10 @@ export default function CreativeTools() {
                       </div>
 
                       <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
                           {tool.title}
                         </h3>
-                        <p className="text-gray-600">
+                        <p className="text-gray-600 dark:text-gray-300">
                           {tool.description}
                         </p>
                       </div>
@@ -148,11 +147,11 @@ export default function CreativeTools() {
               })}
             </motion.div>
 
-            
-           
+
+
           </div>
         </div>
       </div>
-    </section>
+    </section >
   );
 }
