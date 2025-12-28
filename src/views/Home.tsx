@@ -11,6 +11,7 @@ import { motion } from "framer-motion"
 
 
 import "@/assets/css/home.css";
+import { faqItems } from "@/data/faqs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 export default function Home() {
@@ -20,11 +21,11 @@ export default function Home() {
 
       {/* -------hero----------- */}
       <div className="hero  text-white flex flex-col-reverse md:flex-row justify-center items-center  md:gap-0 px-5 md:px-0 pt-12 md:pt-32">
-          <div className="w-full md:w-1/2 md:pr-12 text-center md:text-left  md:mt-5">
-            <motion.h1 initial={{opacity: 0, x: 50}} animate={{opacity: 1, x: 0}} transition={{duration: 2, ease: "easeOut"}} className=" text-5xl md:text-[55px] md:leading-16  font-bold">Faites bonne impression avec votre CV</motion.h1>
-            
-            <motion.div initial={{opacity: 0, y: 50}} animate={{opacity: 1, y: 0}} transition={{duration: 2, ease: "easeOut"}} className="">
-              <p className="mt-5">Créez et téléchargez instantanément votre CV professionnel grâce à notre outil de création rapide et facile.</p>
+        <div className="w-full md:w-1/2 md:pr-12 text-center md:text-left  md:mt-5">
+          <motion.h1 initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 2, ease: "easeOut" }} className=" text-5xl md:text-[55px] md:leading-16  font-bold">Faites bonne impression avec votre CV</motion.h1>
+
+          <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 2, ease: "easeOut" }} className="">
+            <p className="mt-5">Créez et téléchargez instantanément votre CV professionnel grâce à notre outil de création rapide et facile.</p>
 
             <button className="px-5 py-2 bg-white text-purple-900 rounded-full mt-5 hover:bg-black hover:text-white border border-white">CREATE CV</button>
             <button className="px-5 py-2 bg-black text-white rounded-full mt-5 hover:bg-white hover:text-purple-600 border border-white ml-5">LEARN MORE</button>
@@ -53,41 +54,41 @@ export default function Home() {
               </div>
               <h1>2M+ UTILISATEURS SATISFAIRES</h1>
             </div>
-            </motion.div>
-
-          </div>
-          <motion.div initial={{opacity: 0, x: 50}} animate={{opacity: 1, x: 0}} transition={{duration: 2, ease: "easeOut"}} className="relative w-[300px] h-[400px] flex items-center justify-center rounded-xl shadow-2xl will-change-transform hidden lg:block">
-            <img
-              src={modeles1}
-              alt="image-hero"
-              className="absolute h-100 rounded-xl shadow-2xl animate-zigzag-front"
-            />
-            <img
-              src={modeles2}
-              alt="image-hero"
-              className="absolute h-100  rounded-xl shadow-2xl animate-zigzag-back"
-            />
           </motion.div>
 
-
         </div>
+        <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 2, ease: "easeOut" }} className="relative w-[300px] h-[400px] flex items-center justify-center rounded-xl shadow-2xl will-change-transform hidden lg:block">
+          <img
+            src={modeles1}
+            alt="image-hero"
+            className="absolute h-100 rounded-xl shadow-2xl animate-zigzag-front"
+          />
+          <img
+            src={modeles2}
+            alt="image-hero"
+            className="absolute h-100  rounded-xl shadow-2xl animate-zigzag-back"
+          />
+        </motion.div>
+
+
+      </div>
 
       <div className="max-w-6xl mx-auto px-6">
         <HowItWorks />
         <CreativeTools />
         {/* <Testimonials /> */}
-        <FAQ />
+        <FAQ items={faqItems} />
 
         <div className="bg-purple-900 text-white md:flex rounded-xl mb-15 mx-auto flex justify-center items-center">
-          <motion.div initial={{opacity: 0, x: -50}} whileInView={{opacity: 1, x: 0}} transition={{duration: 1, ease:"easeOut"}} viewport={{once:false}} className="ml-7  mt-5 lg:w-1/2 m-5 text-center">
+          <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 1, ease: "easeOut" }} viewport={{ once: false }} className="ml-7  mt-5 lg:w-1/2 m-5 text-center">
             <h1 className="text-4xl font-bold">Faites bonne impression avec votre CV</h1>
             <p className="mt-5">Créez et téléchargez instantanément votre CV professionnel grâce à notre outil de création rapide et facile.</p>
 
             <button className="px-5 py-2 bg-white text-purple-900 rounded-full mt-5 hover:bg-black hover:text-white border border-white">CREATE CV</button>
           </motion.div>
 
-          <motion.div initial={{opacity: 0, x: 50}} whileInView={{opacity: 1, x: 0}} transition={{duration: 1, ease:"easeOut"}} viewport={{once: false}} className=" justify-items-center hidden lg:block">
-            <img src={modeles3} alt=""  className="h-70"/>
+          <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 1, ease: "easeOut" }} viewport={{ once: false }} className=" justify-items-center hidden lg:block">
+            <img src={modeles3} alt="" className="h-70" />
           </motion.div>
         </div>
       </div>

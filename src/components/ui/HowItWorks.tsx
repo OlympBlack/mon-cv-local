@@ -21,17 +21,18 @@ const item = {
 
 export default function HowItWorks() {
   const steps = [
-    {
-      icon: FileText,
-      title: "Entrez vos détails",
-      description:
-        "Commencez par remplir les sections pertinentes qui constituent le contenu de votre CV."
-    },
+    
     {
       icon: Layout,
       title: "Sélectionnez un modèle",
       description:
         "Choisissez un modèle et personnalisez votre CV en fonction de votre style et de votre personnalité."
+    },
+    {
+      icon: FileText,
+      title: "Entrez vos détails",
+      description:
+        "Commencez par remplir les sections pertinentes qui constituent le contenu de votre CV."
     },
     {
       icon: Download,
