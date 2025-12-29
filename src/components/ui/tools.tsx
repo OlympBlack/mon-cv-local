@@ -1,19 +1,19 @@
 import { FileText, Mail, Briefcase, Grid } from "lucide-react";
 import cv_template from "../../assets/images/cv_template.jpg";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 
 /* ===== Variants réutilisables ===== */
-const fadeLeft = {
+const fadeLeft: Variants = {
   hidden: { opacity: 0, x: -50 },
   visible: { opacity: 1, x: 0 },
 };
 
-const fadeUp = {
+const fadeUp: Variants = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0 },
 };
 
-const listContainer = {
+const listContainer: Variants = {
   hidden: {},
   visible: {
     transition: {
@@ -22,7 +22,7 @@ const listContainer = {
   },
 };
 
-const listItem = {
+const listItem: Variants = {
   hidden: { opacity: 0, x: 30 },
   visible: { opacity: 1, x: 0 },
 };
@@ -66,7 +66,7 @@ export default function CreativeTools() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden max-w-lg mx-auto">
               <div className="bg-purple-900 px-6 py-4 flex items-center justify-between">

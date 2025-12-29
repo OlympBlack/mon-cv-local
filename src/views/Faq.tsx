@@ -37,19 +37,19 @@ export default function Home() {
           </div>
         </div>
       </div>
-      
+
     <div className="min-h-screen flex flex-col">
       <Navbar />
 
       <main className="flex-grow max-w-6xl mx-auto px-6 mt-10 w-full">
         {/* Search Section */}
         <section className="mt-12 text-center">
-          <motion.h2 initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: "easeOut" }} className="font-bold text-3xl mb-6">Rechercher une question</motion.h2>
+          <motion.h2 initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }} className="font-bold text-3xl mb-6">Rechercher une question</motion.h2>
           <div className="flex w-full max-w-lg mx-auto items-center gap-3">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 2, ease: "easeOut" }}
+              transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
               className="flex-1"
             >
               <Input
@@ -63,7 +63,7 @@ export default function Home() {
             <motion.button
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1, ease: "easeOut" }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
               className="bg-violet-600 text-white rounded-full hover:bg-black hover:text-white py-3 px-8 text-lg font-medium transition-colors"
               type="button"
             >
@@ -83,7 +83,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true }}
             className="p-10 lg:w-1/2 flex flex-col justify-center items-start"
           >
@@ -98,7 +98,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true }}
             className="hidden lg:flex lg:w-1/2 justify-center items-end bg-purple-800/20"
           >
