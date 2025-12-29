@@ -23,7 +23,26 @@ export default function About() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-black flex flex-col font-sans">
+             <>
+      {/* Background */}
+      <div className="fixed inset-0 -z-10">
+        {/* Light */}
+        <div className="absolute inset-0 -z-10 dark:hidden h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]"></div>
+        {/* Dark */}
+        <div className="absolute inset-0 hidden dark:block bg-black">
+          <div className="absolute inset-0 
+            bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),
+                linear-gradient(to_bottom,#8080800a_1px,transparent_1px)]
+            bg-[size:14px_24px]">
+          </div>
+
+          <div className="absolute left-0 right-0 top-[-10%] 
+            h-[1000px] w-[1000px] rounded-full
+            bg-[radial-gradient(circle_400px_at_50%_300px,#fbfbfb36,#000)]">
+          </div>
+        </div>
+      </div>
+        <div className=" relative min-h-screen  flex flex-col font-sans">
             <Navbar />
 
             <main className="flex-grow pt-24 pb-16">
@@ -45,7 +64,7 @@ export default function About() {
                 </section>
 
                 {/* Pourquoi cette plateforme ? */}
-                <section className="bg-white dark:bg-gray-900 py-20 mb-20">
+                <section className=" dark:bg-gray-900 py-20 mb-20">
                     <div className="max-w-5xl mx-auto px-6">
                         <div className="grid md:grid-cols-2 gap-12 items-center">
                             <motion.div
@@ -133,7 +152,7 @@ export default function About() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6 }}
-                            className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 group"
+                            className=" dark:bg-gray-800 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 group"
                         >
                             <div className="aspect-w-1 aspect-h-1 overflow-hidden h-96">
                                 <img
@@ -157,7 +176,7 @@ export default function About() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: 0.2 }}
-                            className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 group"
+                            className=" dark:bg-gray-800 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 group"
                         >
                             <div className="aspect-w-1 aspect-h-1 overflow-hidden h-96">
                                 <img
@@ -181,5 +200,6 @@ export default function About() {
 
             <Footer />
         </div>
+        </>
     );
 }

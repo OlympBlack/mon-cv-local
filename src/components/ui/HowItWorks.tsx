@@ -43,8 +43,8 @@ export default function HowItWorks() {
   ];
 
   return (
-    <div className="bg-gray-50 dark:bg-black py-16 px-6">
-      <div className="max-w-6xl mx-auto">
+    <div className="py-16 ">
+      <div className="">
 
         {/* TITRE */}
         <motion.div
