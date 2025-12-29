@@ -13,6 +13,7 @@ import { motion } from "framer-motion"
 import "@/assets/css/home.css";
 import { faqItems } from "@/data/faqs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { ReactTyped } from "react-typed";
 
 export default function Home() {
   return (
@@ -32,10 +33,26 @@ export default function Home() {
         {/* -------hero----------- */}
         <div className="hero  text-white flex flex-col-reverse md:flex-row justify-center items-center  md:gap-0 px-5 md:px-0 pt-12 md:pt-32">
           <div className="w-full md:w-1/2 md:pr-12 text-center md:text-left  md:mt-5">
-            <motion.h1 initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }} className=" text-5xl md:text-[55px] md:leading-16  font-bold">Faites bonne impression avec votre CV 100% Gratuit</motion.h1>
+            <motion.h1
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
+              className="text-5xl md:text-[55px] md:leading-16 font-bold"
+            >
+              <ReactTyped
+                strings={["Faites bonne impression avec votre CV 100% Gratuit"]}
+                typeSpeed={50}
+                backSpeed={30}
+                loop={true}
+                showCursor={true}   
+                cursorChar="|"      
+                className="inline-block"
+              />
+            </motion.h1>
+
 
             <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }} className="">
-              <p className="mt-5">Créez et téléchargez instantanément votre CV professionnel grâce à notre outil de création rapide, facile et entièrement gratuit.</p>
+              <p className="mt-5 text-lg md:text-xl">Créez et téléchargez instantanément votre CV professionnel grâce à notre outil de création rapide, facile et entièrement gratuit.</p>
 
               <button className="px-5 py-2 bg-white text-purple-900 rounded-full mt-5 hover:bg-black hover:text-white border border-white">CRÉER MON CV</button>
               <button className="px-5 py-2 bg-black text-white rounded-full mt-5 hover:bg-white hover:text-purple-600 border border-white ml-5">EN SAVOIR PLUS</button>
