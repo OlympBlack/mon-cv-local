@@ -1,5 +1,5 @@
 import { FileText, Mail, Briefcase, Grid } from "lucide-react";
-import cv_template from "../../assets/images/cv_template.jpg";
+import cv_template from "../assets/images/cv_template.jpg";
 import { motion, type Variants } from "framer-motion";
 
 /* ===== Variants réutilisables ===== */

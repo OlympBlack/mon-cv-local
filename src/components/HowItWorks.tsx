@@ -1,5 +1,8 @@
 import { FileText, Layout, Download, ArrowRight } from "lucide-react";
 import { motion, type Variants } from "framer-motion";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
+          <InteractiveHoverButton> Créer mon CV gratuit</InteractiveHoverButton>
+
 
 const container: Variants = {
   hidden: {},
@@ -124,9 +127,9 @@ export default function HowItWorks() {
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          <button className="bg-violet-600 text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:bg-black hover:text-white border border-white">
-            Créer mon CV gratuit
-          </button>
+          
+          <InteractiveHoverButton> Créer mon CV gratuit</InteractiveHoverButton>
+          
         </motion.div>
 
         {/* VIDEO */}

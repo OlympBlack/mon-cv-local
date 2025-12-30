@@ -1,14 +1,15 @@
 import { useState } from "react";
-import { X } from "lucide-react"; // icône X
-import Navbar from "../components/ui/navbar";
-import Footer from "../components/ui/footer";
-import FAQ from "../components/ui/faq";
+import { X } from "lucide-react"; 
+import Navbar from "../components/navbar";
+import Footer from "../components/footer";
+import FAQ from "../components/faq";
 import modeles3 from "@/assets/images/modeles-cv.png";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { faqItems } from "@/data/faqs";
 import "@/assets/css/home.css";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -69,10 +70,10 @@ export default function Home() {
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                className="bg-violet-600 text-white rounded-full hover:bg-black hover:text-white py-3 px-8 text-lg font-medium transition-colors"
+                className=" rounded-full py-3 px-8 text-lg"
                 type="button"
               >
-                Rechercher
+                <InteractiveHoverButton>Rechercher</InteractiveHoverButton>
               </motion.button>
             </div>
 

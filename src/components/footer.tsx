@@ -1,5 +1,5 @@
 import { Github, Twitter, Instagram, Linkedin } from "lucide-react";
-import logo from "../../assets/images/logo.jpg";
+import logo from "../assets/images/logo.jpg";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 

@@ -1,6 +1,6 @@
 
-import Navbar from "../components/ui/navbar";
-import Footer from "../components/ui/footer";
+import Navbar from "../components/navbar";
+import Footer from "../components/footer";
 import { motion, type Variants } from "framer-motion";
 import member2 from "../assets/images/team-member-2.png";
 import vision from "../assets/images/vision.jpg";

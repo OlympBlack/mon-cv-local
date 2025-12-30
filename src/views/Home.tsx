@@ -1,8 +1,8 @@
-import Navbar from "../components/ui/navbar";
-import Footer from "../components/ui/footer";
-import FAQ from "../components/ui/faq";
-import HowItWorks from "../components/ui/HowItWorks";
-import CreativeTools from "../components/ui/tools";
+import Navbar from "../components/navbar";
+import Footer from "../components/footer";
+import FAQ from "../components/faq";
+import HowItWorks from "../components/HowItWorks";
+import CreativeTools from "../components/tools";
 
 import modeles1 from "@/assets/images/cv_template.jpg";
 import modeles2 from "@/assets/images/CV-Template-01.jpg";
@@ -14,6 +14,7 @@ import "@/assets/css/home.css";
 import { faqItems } from "@/data/faqs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ReactTyped } from "react-typed";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
 
 export default function Home() {
   return (
@@ -54,8 +55,9 @@ export default function Home() {
             <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }} className="">
               <p className="mt-5 text-lg md:text-xl">Créez et téléchargez instantanément votre CV professionnel grâce à notre outil de création rapide, facile et entièrement gratuit.</p>
 
-              <button className="px-5 py-2 bg-white text-purple-900 rounded-full mt-5 hover:bg-black hover:text-white border border-white">CRÉER MON CV</button>
-              <button className="px-5 py-2 bg-black text-white rounded-full mt-5 hover:bg-white hover:text-purple-600 border border-white ml-5">EN SAVOIR PLUS</button>
+              <InteractiveHoverButton className="bg-white text-black">CRÉER MON CV</InteractiveHoverButton>
+
+              <InteractiveHoverButton className="bg-black text-white border border-white ml-4">En savoir plus</InteractiveHoverButton>
 
               {/* les avatars */}
               <div className="flex flex-row flex-wrap items-center gap-12 mt-5">
@@ -96,6 +98,8 @@ export default function Home() {
               className="absolute h-100  rounded-xl shadow-2xl animate-zigzag-back"
             />
           </motion.div>
+               
+
 
 
         </div>
@@ -113,6 +117,7 @@ export default function Home() {
               <p className="mt-5">Créez et téléchargez instantanément votre CV professionnel grâce à notre outil 100% gratuit.</p>
 
               <button className="px-5 py-2 bg-white text-purple-900 rounded-full mt-5 hover:bg-black hover:text-white border border-white">CRÉER MON CV GRATUIT</button>
+              
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }} viewport={{ once: false }} className=" justify-items-center hidden lg:block">

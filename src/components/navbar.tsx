@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import logo from "../../assets/images/logo.jpg";
+import logo from "../assets/images/logo.jpg";
 import { Link, useLocation } from "react-router-dom";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
+
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,12 +29,10 @@ export default function Navbar() {
 
         <div className="hidden md:flex items-center gap-3">
           <ThemeToggle />
-          <button className="px-4 py-2 border border-purple-600 text-purple-600 rounded-full hover:text-white hover:bg-black dark:text-purple-400 dark:border-purple-400 dark:hover:bg-white dark:hover:text-black">
-            Se connecter
-          </button>
-          <button className="px-4 py-2 bg-purple-600 text-white rounded-full hover:text-white hover:bg-black dark:hover:bg-white dark:hover:text-black">
-            S’inscrire
-          </button>
+          
+          <InteractiveHoverButton>Connecter</InteractiveHoverButton>
+          
+          <InteractiveHoverButton>S'inscrire</InteractiveHoverButton>
         </div>
 
         <div className="md:hidden flex items-center gap-2">
@@ -51,12 +51,9 @@ export default function Navbar() {
           <Link to="/about" className={location.pathname === "/about" ? "text-purple-600 border-b-2 border-purple-600 pb-1" : "hover:text-gray-900 dark:hover:text-white"}>About</Link>
 
           <div className="flex flex-col gap-2 mt-2">
-            <button className="px-4 py-2 border border-purple-600 text-purple-600 rounded-full hover:text-white hover:bg-black dark:text-purple-400 dark:border-purple-400 dark:hover:bg-white dark:hover:text-black">
-              Se connecter
-            </button>
-            <button className="px-4 py-2 bg-purple-600 text-white rounded-full hover:text-white hover:bg-black dark:hover:bg-white dark:hover:text-black">
-              S’inscrire
-            </button>
+            <InteractiveHoverButton>Connecter</InteractiveHoverButton>
+          
+          <InteractiveHoverButton>S'inscrire</InteractiveHoverButton>
           </div>
         </nav>
       )}
