@@ -1,7 +1,8 @@
 import { FileText, Layout, Download, ArrowRight } from "lucide-react";
 import { motion, type Variants } from "framer-motion";
-import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
-          <InteractiveHoverButton> Créer mon CV gratuit</InteractiveHoverButton>
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
+import { Link } from "react-router-dom";
+
 
 
 const container: Variants = {
@@ -128,7 +129,9 @@ export default function HowItWorks() {
           viewport={{ once: true }}
         >
           
-          <InteractiveHoverButton> Créer mon CV gratuit</InteractiveHoverButton>
+          <Link to="/modeles">
+            <InteractiveHoverButton> Créer mon CV gratuit</InteractiveHoverButton>
+          </Link>
           
         </motion.div>
 

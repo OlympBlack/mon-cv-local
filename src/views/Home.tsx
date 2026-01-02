@@ -104,7 +104,6 @@ export default function Home() {
 
 
 
-
         </div>
 
         <div className=" dark:bg-black  max-w-6xl mx-auto px-6">
