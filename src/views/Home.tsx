@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import FAQ from "../components/faq";
@@ -45,8 +46,8 @@ export default function Home() {
                 typeSpeed={50}
                 backSpeed={30}
                 loop={true}
-                showCursor={true}   
-                cursorChar="|"      
+                showCursor={true}
+                cursorChar="|"
                 className="inline-block"
               />
             </motion.h1>
@@ -55,7 +56,9 @@ export default function Home() {
             <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }} className="">
               <p className="mt-5 text-lg md:text-xl">Créez et téléchargez instantanément votre CV professionnel grâce à notre outil de création rapide, facile et entièrement gratuit.</p>
 
-              <InteractiveHoverButton className="bg-white text-black">CRÉER MON CV</InteractiveHoverButton>
+              <Link to="/modeles">
+                <InteractiveHoverButton className="bg-white text-black">CRÉER MON CV</InteractiveHoverButton>
+              </Link>
 
               <InteractiveHoverButton className="bg-black text-white border border-white ml-4">En savoir plus</InteractiveHoverButton>
 
@@ -98,7 +101,7 @@ export default function Home() {
               className="absolute h-100  rounded-xl shadow-2xl animate-zigzag-back"
             />
           </motion.div>
-               
+
 
 
 
@@ -116,8 +119,10 @@ export default function Home() {
               <h1 className="text-4xl font-bold">Faites bonne impression avec votre CV</h1>
               <p className="mt-5">Créez et téléchargez instantanément votre CV professionnel grâce à notre outil 100% gratuit.</p>
 
-              <button className="px-5 py-2 bg-white text-purple-900 rounded-full mt-5 hover:bg-black hover:text-white border border-white">CRÉER MON CV GRATUIT</button>
-              
+              <Link to="/modeles">
+                <button className="px-5 py-2 bg-white text-purple-900 rounded-full mt-5 hover:bg-black hover:text-white border border-white">CRÉER MON CV GRATUIT</button>
+              </Link>
+
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }} viewport={{ once: false }} className=" justify-items-center hidden lg:block">

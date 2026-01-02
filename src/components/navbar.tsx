@@ -22,7 +22,7 @@ export default function Navbar() {
 
         <nav className="hidden md:flex items-center gap-8 text-gray-600 font-medium dark:text-gray-300">
           <Link to="/" className={location.pathname === "/" ? "text-purple-600 border-b-2 border-purple-600 pb-1" : "hover:text-gray-900 dark:hover:text-white"}>Accueil</Link>
-          <Link to="#" className="hover:text-gray-900 dark:hover:text-white">Modèles</Link>
+          <Link to="/modeles" className="hover:text-gray-900 dark:hover:text-white">Modèles</Link>
           <Link to="/faq" className={location.pathname === "/faq" ? "text-purple-600 border-b-2 border-purple-600 pb-1" : "hover:text-gray-900 dark:hover:text-white"}>FAQ</Link>
           <Link to="/about" className={location.pathname === "/about" ? "text-purple-600 border-b-2 border-purple-600 pb-1" : "hover:text-gray-900 dark:hover:text-white"}>About</Link>
         </nav>
@@ -46,7 +46,7 @@ export default function Navbar() {
       {isOpen && (
         <nav className="md:hidden px-6 pb-4 flex flex-col gap-4 text-gray-600 font-medium border-t border-gray-200 dark:text-gray-300 dark:border-gray-800">
           <Link to="/" className={location.pathname === "/" ? "text-purple-600 border-b-2 border-purple-600 pb-1" : "hover:text-gray-900 dark:hover:text-white"}>Accueil</Link>
-          <Link to="#" className="hover:text-gray-900 dark:hover:text-white">Modèles</Link>
+          <Link to="modeles" className="hover:text-gray-900 dark:hover:text-white">Modèles</Link>
           <Link to="/faq" className={location.pathname === "/faq" ? "text-purple-600 border-b-2 border-purple-600 pb-1" : "hover:text-gray-900 dark:hover:text-white"}>FAQ</Link>
           <Link to="/about" className={location.pathname === "/about" ? "text-purple-600 border-b-2 border-purple-600 pb-1" : "hover:text-gray-900 dark:hover:text-white"}>About</Link>
 
