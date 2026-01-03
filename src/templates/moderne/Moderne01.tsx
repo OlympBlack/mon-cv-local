@@ -1,11 +1,12 @@
+import type { CVData } from "@/types";
 interface CVTemplateProps {
-  data: cvModels;
+  data: CVData;
 }
 
 export default function CVTemplate({ data }: CVTemplateProps) {
   return (
     <div className="w-[800px] min-h-[1100px] bg-white shadow-lg flex font-sans">
-      
+
       {/* COLONNE GAUCHE */}
       <aside
         className="w-1/3 p-6 text-sm text-gray-800"
@@ -60,7 +61,7 @@ export default function CVTemplate({ data }: CVTemplateProps) {
 
       {/* COLONNE DROITE */}
       <main className="w-2/3 p-8 text-sm">
-        
+
         {/* About */}
         <Section title="À PROPOS">
           <p className="text-gray-700 leading-relaxed">{data.about}</p>

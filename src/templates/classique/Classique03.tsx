@@ -1,0 +1,106 @@
+import type { CVData } from "@/types";
+
+interface CVTemplateProps {
+    data: CVData;
+}
+
+export default function CVTemplate({ data }: CVTemplateProps) {
+    return (
+        <div className="w-[800px] min-h-[1100px] bg-white shadow-lg flex flex-col font-sans text-gray-800">
+
+            {/* HEADER */}
+            <header className="text-white p-10 flex justify-between items-center" style={{ backgroundColor: data.color }}>
+                <div>
+                    <h1 className="text-4xl font-bold uppercase tracking-wider mb-1">{data.fullName}</h1>
+                    <p className="text-lg font-medium opacity-90">{data.title}</p>
+                </div>
+                <div className="text-right text-sm space-y-1 opacity-90">
+                    <p>{data.contact.phone}</p>
+                    <p>{data.contact.email}</p>
+                    <p>{data.contact.address}</p>
+                </div>
+            </header>
+
+            <div className="flex flex-grow bg-slate-50">
+                <main className="w-2/3 p-10 bg-white">
+                    <Section title="Profil Professionnel" color={data.color}>
+                        <p className="text-gray-600 leading-relaxed">{data.about}</p>
+                    </Section>
+
+                    <Section title="Expérience" color={data.color}>
+                        <div className="space-y-8 border-l-2 border-slate-200 ml-3 pl-8 py-2">
+                            {data.experiences.map((exp, i) => (
+                                <div key={i} className="relative">
+                                    <span className="absolute -left-[41px] top-1 w-5 h-5 rounded-full border-4 border-white shadow-sm" style={{ backgroundColor: data.color }} />
+                                    <h3 className="font-bold text-lg text-slate-800">{exp.role}</h3>
+                                    <div className="font-semibold text-sm mb-2" style={{ color: data.color }}>{exp.company} | {exp.date}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </Section>
+
+                    <Section title="Références" color={data.color}>
+                        <div className="grid grid-cols-2 gap-4">
+                            {data.references.map((ref, i) => (
+                                <div key={i} className="bg-slate-50 p-4 border rounded">
+                                    <p className="font-bold text-slate-800">{ref.name}</p>
+                                    <p className="text-sm text-slate-500">{ref.contact}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </Section>
+                </main>
+
+                <aside className="w-1/3 p-10 bg-slate-100 border-l border-slate-200">
+                    <Section title="Compétences" small color={data.color}>
+                        <div className="space-y-4">
+                            {data.skills.map((skill, i) => (
+                                <div key={i}>
+                                    <div className="flex justify-between text-sm font-semibold mb-1">
+                                        <span>{skill.name}</span>
+                                    </div>
+                                    <div className="h-2 bg-slate-300 rounded-full overflow-hidden">
+                                        <div className="h-full" style={{ width: `${skill.level}%`, backgroundColor: data.color }} />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </Section>
+
+                    <Section title="Langues" small color={data.color}>
+                        <ul className="space-y-2 text-sm font-medium text-slate-700">
+                            {data.languages.map((lang, i) => (
+                                <li key={i} className="flex items-center gap-2">
+                                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: data.color }} />
+                                    {lang}
+                                </li>
+                            ))}
+                        </ul>
+                    </Section>
+
+                    <Section title="Intérêts" small color={data.color}>
+                        <div className="flex flex-wrap gap-2">
+                            {data.hobbies.map((hobby, i) => (
+                                <span key={i} className="bg-white border border-slate-300 px-3 py-1 rounded text-xs font-semibold text-slate-600">
+                                    {hobby}
+                                </span>
+                            ))}
+                        </div>
+                    </Section>
+                </aside>
+            </div>
+
+        </div>
+    );
+}
+
+function Section({ title, children, small, color }: { title: string; children: React.ReactNode; small?: boolean; color: string }) {
+    return (
+        <section className="mb-10">
+            <h2 className={`font-bold uppercase text-slate-800 border-b-2 pb-2 mb-6 ${small ? 'text-lg' : 'text-xl'}`} style={{ borderColor: color }}>
+                {title}
+            </h2>
+            <div>{children}</div>
+        </section>
+    );
+}

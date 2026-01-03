@@ -90,6 +90,14 @@ export default function Modeles() {
 
   return (
     <>
+    {/* Background */}
+            <div className="fixed inset-0 -z-10">
+                {/* Light */}
+                <div className="absolute inset-0 -z-10 dark:hidden h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]"></div>
+                {/* Dark */}
+                <div className="absolute inset-0 -z-10 hidden dark:block h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]"></div>
+
+            </div>
       <div className="relative min-h-screen flex flex-col">
         <Navbar />
 

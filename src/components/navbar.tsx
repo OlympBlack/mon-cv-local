@@ -29,9 +29,9 @@ export default function Navbar() {
 
         <div className="hidden md:flex items-center gap-3">
           <ThemeToggle />
-          
+
           <InteractiveHoverButton>Connecter</InteractiveHoverButton>
-          
+
           <InteractiveHoverButton>S'inscrire</InteractiveHoverButton>
         </div>
 
@@ -52,8 +52,8 @@ export default function Navbar() {
 
           <div className="flex flex-col gap-2 mt-2">
             <InteractiveHoverButton>Connecter</InteractiveHoverButton>
-          
-          <InteractiveHoverButton>S'inscrire</InteractiveHoverButton>
+
+            <InteractiveHoverButton>S'inscrire</InteractiveHoverButton>
           </div>
         </nav>
       )}

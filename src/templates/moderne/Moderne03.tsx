@@ -1,0 +1,131 @@
+import type { CVData } from "@/types";
+
+interface CVTemplateProps {
+    data: CVData;
+}
+
+export default function CVTemplate({ data }: CVTemplateProps) {
+    return (
+        <div className="w-[800px] min-h-[1100px] bg-white shadow-lg flex font-sans">
+            {/* MAIN CONTENT (Left) */}
+            <main className="w-2/3 p-10">
+                <header className="mb-10">
+                    <h1 className="text-4xl font-black text-gray-800 tracking-tighter uppercase mb-2">
+                        <span style={{ color: data.color }}>{data.fullName.split(" ")[0]}</span>{" "}
+                        {data.fullName.split(" ").slice(1).join(" ")}
+                    </h1>
+                    <p className="text-xl text-gray-400 font-light tracking-widest uppercase">
+                        {data.title}
+                    </p>
+                </header>
+
+                <Section title="Profil Personnel" color={data.color}>
+                    <p className="text-gray-600 leading-relaxed">{data.about}</p>
+                </Section>
+
+                <Section title="Expérience" color={data.color}>
+                    <div className="space-y-6">
+                        {data.experiences.map((exp, i) => (
+                            <div key={i}>
+                                <h3 className="font-bold text-lg text-gray-800">{exp.role}</h3>
+                                <div className="flex items-center gap-2 font-medium mb-1" style={{ color: data.color }}>
+                                    <span>{exp.company}</span>
+                                    <span className="w-1 h-1 bg-gray-300 rounded-full" />
+                                    <span className="text-sm text-gray-400 font-normal">{exp.date}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </Section>
+
+                <Section title="Références" color={data.color}>
+                    <div className="flex gap-8">
+                        {data.references.map((ref, i) => (
+                            <div key={i}>
+                                <p className="font-bold">{ref.name}</p>
+                                <p className="text-sm text-gray-500">{ref.contact}</p>
+                            </div>
+                        ))}
+                    </div>
+                </Section>
+            </main>
+
+            {/* SIDEBAR (Right) */}
+            <aside className="w-1/3 bg-gray-900 text-white p-8">
+                <div className="flex justify-center mb-8">
+                    <div className="w-32 h-32 rounded-full border-4 bg-gray-700" style={{ borderColor: data.color }} />
+                </div>
+
+                <div className="space-y-8">
+                    <div>
+                        <h3 className="font-bold tracking-widest text-sm mb-4 uppercase" style={{ color: data.color }}>
+                            Contact
+                        </h3>
+                        <div className="space-y-3 text-sm text-gray-300">
+                            <p>{data.contact.phone}</p>
+                            <p>{data.contact.email}</p>
+                            <p>{data.contact.address}</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 className="font-bold tracking-widest text-sm mb-4 uppercase" style={{ color: data.color }}>
+                            Compétences
+                        </h3>
+                        <div className="space-y-4">
+                            {data.skills.map((skill, i) => (
+                                <div key={i}>
+                                    <div className="flex justify-between text-xs mb-1">
+                                        <span>{skill.name}</span>
+                                    </div>
+                                    <div className="h-1 bg-gray-800 rounded-full overflow-hidden">
+                                        <div
+                                            className="h-full"
+                                            style={{ width: `${skill.level}%`, backgroundColor: data.color }}
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 className="font-bold tracking-widest text-sm mb-4 uppercase" style={{ color: data.color }}>
+                            Langues
+                        </h3>
+                        <ul className="text-sm text-gray-300 space-y-1">
+                            {data.languages.map((lang, i) => (
+                                <li key={i}>{lang}</li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 className="font-bold tracking-widest text-sm mb-4 uppercase" style={{ color: data.color }}>
+                            Intérêts
+                        </h3>
+                        <div className="flex flex-wrap gap-2">
+                            {data.hobbies.map((hobby, i) => (
+                                <span key={i} className="text-xs border border-gray-700 px-2 py-1 rounded">
+                                    {hobby}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    );
+}
+
+function Section({ title, children, color }: { title: string; children: React.ReactNode; color: string }) {
+    return (
+        <section className="mb-10">
+            <h2 className="font-bold text-gray-900 text-xl mb-4 relative inline-block">
+                {title}
+                <span className="absolute -bottom-1 left-0 w-1/3 h-1" style={{ backgroundColor: color }} />
+            </h2>
+            <div>{children}</div>
+        </section>
+    );
+}
