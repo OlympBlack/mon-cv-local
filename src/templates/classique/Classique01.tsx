@@ -6,90 +6,175 @@ interface CVTemplateProps {
 
 export default function CVTemplate({ data }: CVTemplateProps) {
     return (
-        <div className="w-[800px] min-h-[1100px] bg-white shadow-lg p-12 font-serif text-gray-800">
-            {/* HEADER */}
-            <header className="text-center border-b-2 pb-8 mb-8" style={{ borderColor: data.color }}>
-                <h1 className="text-4xl font-bold uppercase mb-2 tracking-widest">
-                    {data.fullName}
-                </h1>
-                <p className="text-xl italic mb-4">{data.title}</p>
-                <div className="flex justify-center gap-4 text-sm font-sans">
-                    <span>{data.contact.address}</span>
-                    <span>|</span>
-                    <span>{data.contact.phone}</span>
-                    <span>|</span>
-                    <span>{data.contact.email}</span>
+        <div className="w-[800px] min-h-[1100px] bg-gray-300 dark:bg-slate-900 shadow-2xl flex relative font-sans">
+            {/* DIAGONAL RIBBON */}
+            <div className="absolute -top-2 -left-2 overflow-hidden w-32 h-32 z-10">
+                <div className="absolute transform -rotate-45 bg-gray-500 dark:bg-gray-700 text-white text-center font-bold py-1 left-[-35px] top-[25px] w-[170px] text-xs">
+                    ● IMAGE NOT INCLUDED
                 </div>
-            </header>
+            </div>
 
-            {/* CONTENT */}
-            <div className="flex gap-8">
-                <div className="w-2/3">
-                    <Section title="Profil" color={data.color}>
-                        <p className="leading-relaxed text-justify">{data.about}</p>
-                    </Section>
+            {/* LEFT SIDEBAR */}
+            <div className="w-[280px] text-white flex flex-col relative" style={{ backgroundColor: data.color || '#0f5e6e' }}>
+                {/* PHOTO PLACEHOLDER */}
+                <div className="mt-12 mx-auto">
+                    <div className="w-[210px] h-[210px] rounded-full overflow-hidden bg-white mx-auto flex items-center justify-center">
+                        {data.profileImage ? (
+                            <img
+                                src={data.profileImage}
+                                alt={data.fullName}
+                                className="w-full h-full object-cover"
+                            />
+                        ) : (
+                            <span className="text-gray-400 dark:text-gray-500 font-bold uppercase tracking-widest text-lg">Photo</span>
+                        )}
+                    </div>
+                </div>
 
-                    <Section title="Expériences" color={data.color}>
-                        {data.experiences.map((exp, i) => (
-                            <div key={i} className="mb-6">
-                                <div className="flex justify-between items-baseline mb-1">
-                                    <h3 className="font-bold text-lg">{exp.role}</h3>
-                                    <span className="text-sm italic">{exp.date}</span>
+                {/* NAME */}
+                <div className="text-center mt-6 px-6">
+                    {data.fullName && (
+                        <>
+                            <h1 className="text-4xl font-bold leading-tight">
+                                {data.fullName.split(' ')[0]}
+                            </h1>
+                            <h1 className="text-4xl font-bold leading-tight">
+                                {data.fullName.split(' ').slice(1).join(' ')}
+                            </h1>
+                        </>
+                    )}
+                    {data.title && <p className="text-sm mt-2 font-light">{data.title}</p>}
+                </div>
+
+                {/* PERSONAL INFO */}
+                <div className="px-6 mt-6 text-sm space-y-2">
+                    {data.contact.address && (
+                        <div>
+                            <span className="font-semibold">Address: </span>
+                            <span className="font-light">{data.contact.address}</span>
+                        </div>
+                    )}
+                </div>
+
+                {/* ABOUT TEXT */}
+                {data.about && (
+                    <div className="px-6 mt-6">
+                        <p className="text-xs leading-relaxed font-light">{data.about}</p>
+                    </div>
+                )}
+
+                {/* PROFESSIONAL SKILLS */}
+                {data.skills.length > 0 && (
+                    <div className="px-6 mt-8">
+                        <h2 className="text-base font-bold uppercase mb-4 pb-2 border-b-2 border-white">
+                            Compétences
+                        </h2>
+
+                        {data.skills.map((skill, i) => (
+                            <div key={i} className="mb-3">
+                                <div className="flex justify-between text-xs mb-1">
+                                    <span className="font-semibold">{skill.name}</span>
+                                    <span>{skill.level}%</span>
                                 </div>
-                                <p className="font-semibold mb-2">{exp.company}</p>
+                                <div className="w-full h-1 bg-black bg-opacity-30 rounded-full overflow-hidden">
+                                    <div
+                                        className="h-full bg-yellow-400 rounded-full"
+                                        style={{ width: `${skill.level}%` }}
+                                    ></div>
+                                </div>
                             </div>
                         ))}
-                    </Section>
+                    </div>
+                )}
 
-                    <Section title="Compétences" color={data.color}>
-                        <ul className="list-disc ml-5 grid grid-cols-2 gap-x-4">
-                            {data.skills.map((skill, i) => (
-                                <li key={i} className="mb-1">{skill.name} - {skill.level}%</li>
+                {/* LANGUAGE */}
+                {data.languages.length > 0 && (
+                    <div className="px-6 mt-8">
+                        <h2 className="text-base font-bold uppercase mb-4 pb-2 border-b-2 border-white">
+                            Langues
+                        </h2>
+
+                        {data.languages.map((lang, i) => (
+                            <div key={i} className="mb-3">
+                                <div className="flex justify-between text-xs mb-1">
+                                    <span className="font-semibold">{lang}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {/* HOBBIES */}
+                {data.hobbies.length > 0 && (
+                    <div className="px-6 mt-8">
+                        <h2 className="text-base font-bold uppercase mb-4 pb-2 border-b-2 border-white">
+                            Centres d'intérêt
+                        </h2>
+                        <ul className="text-xs space-y-2">
+                            {data.hobbies.map((hobby, i) => (
+                                <li key={i} className="font-light">{hobby}</li>
                             ))}
                         </ul>
-                    </Section>
+                    </div>
+                )}
+
+                {/* SOCIAL ICONS */}
+                <div className="px-6 mt-auto mb-6 flex gap-6 text-xs">
+                </div>
+            </div>
+
+            {/* RIGHT CONTENT - LIGHT GRAY */}
+            <div className="flex-1 bg-gray-100 dark:bg-slate-800 dark:text-gray-100 p-10">
+                {/* CONTACT INFO */}
+                <div className="text-right text-xs mb-6 pb-4 border-b-4" style={{ borderColor: data.color || '#0f5e6e' }}>
+                    {data.contact.phone && <p className="font-semibold">{data.contact.phone}</p>}
+                    {data.contact.email && <p className="font-semibold">{data.contact.email}</p>}
                 </div>
 
-                <div className="w-1/3 border-l border-gray-300 pl-8">
-                    <Section title="Langues" color={data.color}>
-                        <ul className="space-y-2">
-                            {data.languages.map((lang, i) => (
-                                <li key={i}>{lang}</li>
-                            ))}
-                        </ul>
-                    </Section>
+                {/* WORK EXPERIENCE */}
+                {data.experiences.length > 0 && (
+                    <section className="mb-10">
+                        <h2 className="text-xl font-bold uppercase mb-6 tracking-wide">Expériences</h2>
 
-                    <Section title="Centres d'intérêt" color={data.color}>
-                        <ul className="space-y-2">
-                            {data.hobbies.map((hobby, i) => (
-                                <li key={i}>{hobby}</li>
-                            ))}
-                        </ul>
-                    </Section>
+                        {data.experiences.map((exp, i) => (
+                            <div key={i} className="mb-6">
+                                {exp.date && <p className="text-sm font-semibold mb-1">{exp.date}</p>}
+                                {(exp.role || exp.company) && (
+                                    <h3 className="font-bold text-base mb-2">
+                                        {exp.role} {exp.company && `- @${exp.company}`}
+                                    </h3>
+                                )}
+                                {exp.description && (
+                                    <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{exp.description}</p>
+                                )}
+                            </div>
+                        ))}
+                    </section>
+                )}
 
-                    <Section title="Références" color={data.color}>
-                        <div className="space-y-3">
+                {/* REFERENCES */}
+                {data.references.length > 0 && (
+                    <section>
+                        <h2 className="text-xl font-bold uppercase mb-6 tracking-wide">References</h2>
+
+                        <div className="grid grid-cols-2 gap-8">
                             {data.references.map((ref, i) => (
                                 <div key={i}>
-                                    <p className="font-bold">{ref.name}</p>
-                                    <p className="text-sm">{ref.contact}</p>
+                                    <h3 className="font-bold text-sm mb-2">{ref.name}</h3>
+                                    <p className="text-xs text-gray-700 dark:text-gray-400">Job Title</p>
+                                    <p className="text-xs text-gray-700 dark:text-gray-400">City, State, Country</p>
+                                    {ref.contact && (
+                                        <>
+                                            <p className="text-xs font-bold mt-2">T: {ref.contact}</p>
+                                            <p className="text-xs font-bold">E: {ref.contact}</p>
+                                        </>
+                                    )}
                                 </div>
                             ))}
                         </div>
-                    </Section>
-                </div>
+                    </section>
+                )}
             </div>
         </div>
-    );
-}
-
-function Section({ title, children, color }: { title: string; children: React.ReactNode; color?: string }) {
-    return (
-        <section className="mb-8">
-            <h2 className="font-bold text-xl uppercase mb-4 border-b pb-1 inline-block" style={{ borderColor: color || '#d1d5db' }}>
-                {title}
-            </h2>
-            <div>{children}</div>
-        </section>
     );
 }

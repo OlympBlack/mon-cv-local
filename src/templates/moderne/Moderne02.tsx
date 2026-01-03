@@ -8,8 +8,14 @@ export default function CVTemplate({ data }: CVTemplateProps) {
     return (
         <div className="w-[800px] min-h-[1100px] bg-white shadow-lg flex flex-col font-sans">
             {/* HEADER */}
-            <header className="bg-gray-100 p-8 flex items-center gap-6 border-b border-gray-200">
-                <div className="w-24 h-24 rounded-full bg-gray-300 flex-shrink-0" />
+            <header className="bg-gray-100 p-8 flex items-center gap-8 border-b border-gray-200">
+                <div className="w-32 h-32 rounded-full bg-gray-300 flex-shrink-0 overflow-hidden border-2 border-white shadow-sm flex items-center justify-center">
+                    {data.profileImage ? (
+                        <img src={data.profileImage} alt={data.fullName} className="w-full h-full object-cover" />
+                    ) : (
+                        <span className="text-gray-500 font-bold text-sm uppercase">Photo</span>
+                    )}
+                </div>
                 <div>
                     <h1 className="text-3xl font-bold text-gray-900 uppercase tracking-wide">
                         {data.fullName}
@@ -47,6 +53,9 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                                     </span>
                                     <span>{exp.date}</span>
                                 </div>
+                                {exp.description && (
+                                    <p className="text-sm text-gray-600 mt-2 whitespace-pre-line">{exp.description}</p>
+                                )}
                             </div>
                         ))}
                     </Section>

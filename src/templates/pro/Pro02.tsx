@@ -10,9 +10,18 @@ export default function CVTemplate({ data }: CVTemplateProps) {
 
             {/* HEADER */}
             <header className="text-white p-12" style={{ backgroundColor: data.color }}>
-                <div className="flex justify-between items-start">
-                    <p className="text-gray-500 font-bold uppercase tracking-widest text-sm mb-2">{data.title}</p>
-                    <h1 className="text-5xl font-black uppercase leading-none">{data.fullName}</h1>
+                <div className="flex justify-between items-start gap-8">
+                    <div className="flex-1">
+                        <p className="text-gray-500 font-bold uppercase tracking-widest text-sm mb-2">{data.title}</p>
+                        <h1 className="text-5xl font-black uppercase leading-none">{data.fullName}</h1>
+                    </div>
+                    <div className="w-40 h-40 rounded-full shadow-2xl overflow-hidden border-4 border-white bg-black/20 flex items-center justify-center">
+                        {data.profileImage ? (
+                            <img src={data.profileImage} alt={data.fullName} className="w-full h-full object-cover" />
+                        ) : (
+                            <span className="text-white/50 font-bold uppercase tracking-widest text-lg">Photo</span>
+                        )}
+                    </div>
                 </div>
                 <div className="text-right text-xs bg-gray-900 text-white p-4 -mb-[42px]">
                     <p className="font-bold mb-1">CONTACT</p>
@@ -64,18 +73,20 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                             <div key={i} className="bg-white p-6 shadow-sm border-l-4 rounded-r-lg" style={{ borderColor: data.color }}>
                                 <h4 className="font-bold text-lg text-gray-800">{exp.role}</h4>
                                 <p className="font-medium mb-1" style={{ color: data.color }}>{exp.company}</p>
-                                <p className="text-sm text-gray-400 italic">{exp.date}</p>
+                                <p className="text-sm text-gray-400 italic mb-2">{exp.date}</p>
+                                {exp.description && (
+                                    <p className="text-sm text-gray-700 whitespace-pre-line">{exp.description}</p>
+                                )}
                             </div>
                         ))}
                     </Section>
 
                     <Section title="Références">
                         <div className="grid grid-cols-2 gap-4">
-                            {data.experiences.map((exp, i) => (
+                            {data.references.map((ref, i) => (
                                 <div key={i} className="bg-white p-6 shadow-sm border-l-4 rounded-r-lg" style={{ borderColor: data.color }}>
-                                    <h4 className="font-bold text-lg text-gray-800">{exp.role}</h4>
-                                    <p className="font-medium mb-1" style={{ color: data.color }}>{exp.company}</p>
-                                    <p className="text-sm text-gray-400 italic">{exp.date}</p>
+                                    <h4 className="font-bold text-lg text-gray-800">{ref.name}</h4>
+                                    <p className="text-sm text-gray-400 italic">{ref.contact}</p>
                                 </div>
                             ))}
                         </div>

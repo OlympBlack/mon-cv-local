@@ -10,9 +10,18 @@ export default function CVTemplate({ data }: CVTemplateProps) {
 
             {/* HEADER */}
             <header className="bg-slate-800 text-white p-10 flex justify-between items-center">
-                <div>
-                    <h1 className="text-4xl font-bold uppercase tracking-wider mb-1">{data.fullName}</h1>
-                    <p className="text-lg font-medium" style={{ color: data.color }}>{data.title}</p>
+                <div className="flex items-center gap-6">
+                    <div className="w-32 h-32 rounded-full border-4 border-white/20 overflow-hidden shadow-lg flex-shrink-0 bg-white/10 flex items-center justify-center">
+                        {data.profileImage ? (
+                            <img src={data.profileImage} alt={data.fullName} className="w-full h-full object-cover" />
+                        ) : (
+                            <span className="text-white/30 font-bold text-sm uppercase">PHOTO</span>
+                        )}
+                    </div>
+                    <div>
+                        <h1 className="text-4xl font-bold uppercase tracking-wider mb-1">{data.fullName}</h1>
+                        <p className="text-lg font-medium" style={{ color: data.color }}>{data.title}</p>
+                    </div>
                 </div>
                 <div className="text-right text-sm space-y-1 text-slate-300">
                     <p>{data.contact.phone}</p>
@@ -34,6 +43,9 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                                     <span className="absolute -left-[41px] top-1 w-5 h-5 rounded-full border-4 border-white shadow-sm" style={{ backgroundColor: data.color }} />
                                     <h3 className="font-bold text-lg text-slate-800">{exp.role}</h3>
                                     <div className="font-semibold text-sm mb-2" style={{ color: data.color }}>{exp.company} | {exp.date}</div>
+                                    {exp.description && (
+                                        <p className="text-sm text-gray-600 whitespace-pre-line">{exp.description}</p>
+                                    )}
                                 </div>
                             ))}
                         </div>

@@ -13,8 +13,18 @@ export default function CVTemplate({ data }: CVTemplateProps) {
         style={{ backgroundColor: `${data.color}20` }}
       >
         {/* Photo */}
-        <div className="flex justify-center mb-4">
-          <div className="w-32 h-32 rounded-full bg-gray-300" />
+        <div className="flex justify-center mb-6">
+          <div className="w-40 h-40 rounded-full bg-gray-200 border-4 border-white shadow-sm overflow-hidden flex items-center justify-center">
+            {data.profileImage ? (
+              <img
+                src={data.profileImage}
+                alt={data.fullName}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <span className="text-gray-400 font-bold uppercase tracking-widest">Photo</span>
+            )}
+          </div>
         </div>
 
         {/* Nom */}
@@ -70,12 +80,15 @@ export default function CVTemplate({ data }: CVTemplateProps) {
         {/* Experience */}
         <Section title="EXPÉRIENCES">
           {data.experiences.map((exp, i) => (
-            <div key={i} className="mb-4">
+            <div key={i} className="mb-6">
               <div className="flex justify-between font-semibold">
                 <span>{exp.role}</span>
                 <span className="text-gray-500">{exp.date}</span>
               </div>
-              <p className="italic text-gray-600">{exp.company}</p>
+              <p className="italic text-gray-600 mb-2">{exp.company}</p>
+              {exp.description && (
+                <p className="text-gray-700 text-xs leading-relaxed whitespace-pre-line">{exp.description}</p>
+              )}
             </div>
           ))}
         </Section>

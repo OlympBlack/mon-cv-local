@@ -7,9 +7,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Trash2, Plus, Download, Printer, Loader2 } from "lucide-react";
+import { Trash2, Plus, Download, Printer, Loader2, Upload, X, ImageIcon } from "lucide-react";
 import type { CVData } from "@/types";
-import { useState } from "react";
+import { useState, useRef } from "react";
 // @ts-ignore
 import html2pdf from "html2pdf.js";
 import { toast } from "react-toastify";
@@ -20,20 +20,22 @@ interface EditorPanelProps {
 }
 
 const COLORS = [
-  "#000000", // Noir
-  "#3b82f6", // Bleu
-  "#ef4444", // Rouge
-  "#10b981", // Vert
-  "#8b5cf6", // Violet
-  "#f59e0b", // Jaune
-  "#ec4899", // Rose
-  "#6366f1", // Indigo
-  "#14b8a6", // Teal
-  "#f97316", // Orange
+  "#a73d34",
+  "#000000",
+  "#3b82f6",
+  "#ef4444",
+  "#10b981",
+  "#8b5cf6",
+  "#f59e0b",
+  "#ec4899",
+  "#6366f1",
+  "#14b8a6",
+  "#f97316",
 ];
 
 export default function EditorPanel({ data, onChange }: EditorPanelProps) {
   const [isExporting, setIsExporting] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (field: keyof CVData, value: any) => {
     onChange({ ...data, [field]: value });
@@ -44,6 +46,41 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
       ...data,
       [parent]: { ...data[parent as keyof CVData] as any, [field]: value },
     });
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Vérifier le type de fichier
+    if (!file.type.startsWith('image/')) {
+      toast.error("Veuillez sélectionner une image valide");
+      return;
+    }
+
+    // Vérifier la taille (5 Mo max)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("L'image ne doit pas dépasser 5 Mo");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      handleChange("profileImage", reader.result as string);
+      toast.success("Photo ajoutée avec succès !");
+    };
+    reader.onerror = () => {
+      toast.error("Erreur lors du chargement de l'image");
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemoveImage = () => {
+    handleChange("profileImage", "");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    toast.info("Photo supprimée");
   };
 
   const handlePrint = () => {
@@ -58,28 +95,33 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
     }
 
     setIsExporting(true);
-    const toastId = toast.loading("Génération du PDF...");
+    const toastId = toast.loading("Génération du PDF en cours...");
 
     const opt = {
       margin: 0,
-      filename: `CV-${data.fullName.replace(/\s+/g, "_")}.pdf`,
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+      filename: `CV_${data.fullName.replace(/\s+/g, "_") || "Document"}.pdf`,
+      image: { type: "jpeg" as const, quality: 0.98 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        letterRendering: true,
+        logging: false
+      },
       jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
     };
 
     try {
       await html2pdf().set(opt).from(element).save();
       toast.update(toastId, {
-        render: "PDF téléchargé avec succès !",
+        render: "✅ PDF téléchargé avec succès !",
         type: "success",
         isLoading: false,
         autoClose: 3000,
       });
     } catch (e) {
-      console.error(e);
+      console.error("Erreur export PDF:", e);
       toast.update(toastId, {
-        render: "Erreur lors de l'export PDF.",
+        render: "❌ Erreur lors de l'export PDF.",
         type: "error",
         isLoading: false,
         autoClose: 3000,
@@ -114,166 +156,293 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
     <div className="space-y-8 pb-20">
 
       {/* HEADER ACTIONS */}
-      <div className="flex items-center justify-between sticky top-0 md:-top-6 z-10 bg-white/80 dark:bg-black/80 backdrop-blur-md py-4 border-b dark:border-gray-800 mb-6">
-        <h2 className="text-2xl font-bold tracking-tight dark:text-white">Éditeur</h2>
+      <div className="flex items-center justify-between sticky top-0 md:-top-6 z-10 bg-white/90 dark:bg-black/90 backdrop-blur-md py-4 border-b dark:border-gray-800 mb-6">
+        <h2 className="text-2xl font-bold tracking-tight dark:text-white"> Éditeur CV</h2>
         <div className="flex gap-2">
           <Button
             onClick={handlePrint}
             variant="secondary"
             size="sm"
             className="gap-2 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
-            title="Imprimer"
+            title="Imprimer le CV"
           >
-            <Printer className="w-4 h-4" /> <span className="hidden sm:inline">Imprimer</span>
+            <Printer className="w-4 h-4" />
+            <span className="hidden sm:inline">Imprimer</span>
           </Button>
           <Button
             onClick={handleExportPDF}
             disabled={isExporting}
             size="sm"
-            className="gap-2 bg-purple-600 hover:bg-purple-700 text-white"
+            className="gap-2 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white shadow-md"
           >
-            {isExporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+            {isExporting ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Download className="w-4 h-4" />
+            )}
             <span>{isExporting ? "Génération..." : "Export PDF"}</span>
           </Button>
         </div>
       </div>
 
       {/* COLOR PICKER */}
-      <div className="bg-card border rounded-xl p-4 space-y-3 shadow-sm dark:bg-black dark:border-gray-800">
-        <Label>Couleur principale</Label>
-        <div className="flex flex-wrap gap-2">
+      <div className="bg-white/60 border rounded-xl p-5 space-y-3 shadow-sm dark:bg-black/60 dark:border-gray-800 backdrop-blur-sm">
+        <Label className="text-base font-semibold"> Couleur principale</Label>
+        <div className="flex flex-wrap gap-3">
           {COLORS.map((c) => (
             <button
               key={c}
               onClick={() => handleChange("color", c)}
-              className={`w-8 h-8 rounded-full border-2 transition-all ${data.color === c ? "border-primary scale-110 shadow-md" : "border-transparent hover:scale-105"
+              className={`w-10 h-10 rounded-full border-2 transition-all hover:scale-110 ${data.color === c
+                  ? "border-purple-600 scale-110 shadow-lg ring-2 ring-purple-300"
+                  : "border-gray-300 dark:border-gray-600 hover:border-gray-400"
                 }`}
               style={{ backgroundColor: c }}
+              title={c}
             />
           ))}
-          <div className="relative w-8 h-8 rounded-full overflow-hidden border border-gray-200 ml-1">
+          <div className="relative">
             <input
               type="color"
               value={data.color}
               onChange={(e) => handleChange("color", e.target.value)}
-              className="absolute inset-0 w-[150%] h-[150%] -top-1 -left-1 cursor-pointer"
+              className="w-10 h-10 rounded-full cursor-pointer border-2 border-gray-300 dark:border-gray-600"
+              title="Couleur personnalisée"
             />
           </div>
         </div>
+        <p className="text-xs text-gray-600 dark:text-gray-400">
+          Choisissez une couleur pour personnaliser votre CV
+        </p>
       </div>
 
       <Accordion type="multiple" defaultValue={["infos", "experiences"]} className="w-full space-y-2">
 
         {/* INFOS PERSONNELLES */}
-        <AccordionItem value="infos" className="border rounded-xl px-4 bg-white dark:bg-black dark:border-gray-800 shadow-sm">
-          <AccordionTrigger className="hover:no-underline dark:text-gray-100">Informations Personnelles</AccordionTrigger>
+        <AccordionItem value="infos" className="border rounded-xl px-4 bg-white/60 dark:bg-black/60 dark:border-gray-800 shadow-sm backdrop-blur-sm">
+          <AccordionTrigger className="hover:no-underline dark:text-gray-100">
+            Informations Personnelles
+          </AccordionTrigger>
           <AccordionContent className="space-y-4 pt-2">
-            <div className="grid gap-3">
+            <div className="grid gap-4">
+
+              {/* PHOTO DE PROFIL */}
+              <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl p-4 bg-gray-50 dark:bg-gray-900/50">
+                <Label className="dark:text-gray-300 mb-3 block text-sm font-semibold flex items-center gap-2">
+                  <ImageIcon className="w-4 h-4" />
+                  Photo de profil
+                </Label>
+
+                {data.profileImage ? (
+                  <div className="flex items-center gap-4">
+                    <div className="relative">
+                      <img
+                        src={data.profileImage}
+                        alt="Profile"
+                        className="w-28 h-28 rounded-full object-cover border-4 border-white dark:border-gray-700 shadow-lg"
+                      />
+                      <Button
+                        onClick={handleRemoveImage}
+                        variant="destructive"
+                        size="icon"
+                        className="absolute -top-2 -right-2 h-8 w-8 rounded-full shadow-md"
+                        title="Supprimer la photo"
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                      <p className="font-semibold mb-1">Photo ajoutée</p>
+                      <button
+                        onClick={() => fileInputRef.current?.click()}
+                        className="text-purple-600 hover:text-purple-700 underline"
+                      >
+                        Changer la photo
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <label
+                      htmlFor="profile-upload"
+                      className="cursor-pointer block"
+                    >
+                      <div className="flex flex-col items-center justify-center gap-3 px-6 py-8 border-2 border-dashed border-gray-400 dark:border-gray-600 rounded-lg hover:border-purple-500 dark:hover:border-purple-500 transition-all hover:bg-purple-50 dark:hover:bg-purple-900/20">
+                        <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center">
+                          <Upload className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+                        </div>
+                        <div className="text-center">
+                          <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                            Cliquez pour télécharger
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            PNG, JPG, JPEG (max 5 Mo)
+                          </p>
+                        </div>
+                      </div>
+                    </label>
+                    <input
+                      ref={fileInputRef}
+                      id="profile-upload"
+                      type="file"
+                      accept="image/png,image/jpeg,image/jpg"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                    />
+                  </div>
+                )}
+              </div>
+
               <div>
-                <Label className="dark:text-gray-300">Nom complet</Label>
+                <Label className="dark:text-gray-300 mb-1.5 block">Nom complet *</Label>
                 <Input
                   value={data.fullName}
                   onChange={(e) => handleChange("fullName", e.target.value)}
-                  placeholder="Jean Dupont"
+                  placeholder="Ex: Marie Dupont"
                   className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                 />
               </div>
+
               <div>
-                <Label className="dark:text-gray-300">Titre du poste</Label>
+                <Label className="dark:text-gray-300 mb-1.5 block">Titre du poste *</Label>
                 <Input
                   value={data.title}
                   onChange={(e) => handleChange("title", e.target.value)}
-                  placeholder="Développeur Fullstack"
+                  placeholder="Ex: Développeur Full Stack"
                   className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-3">
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                  <Label className="dark:text-gray-300">Email</Label>
+                  <Label className="dark:text-gray-300 mb-1.5 block">Email</Label>
                   <Input
+                    type="email"
                     value={data.contact.email}
                     onChange={(e) => handleNestedChange("contact", "email", e.target.value)}
+                    placeholder="email@exemple.com"
                     className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                   />
                 </div>
                 <div>
-                  <Label className="dark:text-gray-300">Téléphone</Label>
+                  <Label className="dark:text-gray-300 mb-1.5 block">Téléphone</Label>
                   <Input
+                    type="tel"
                     value={data.contact.phone}
                     onChange={(e) => handleNestedChange("contact", "phone", e.target.value)}
+                    placeholder="+33 6 12 34 56 78"
                     className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                   />
                 </div>
               </div>
+
               <div>
-                <Label className="dark:text-gray-300">Adresse</Label>
+                <Label className="dark:text-gray-300 mb-1.5 block">Adresse</Label>
                 <Input
                   value={data.contact.address}
                   onChange={(e) => handleNestedChange("contact", "address", e.target.value)}
+                  placeholder="Ex: 123 Rue de Paris, 75001 Paris"
                   className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                 />
               </div>
+
               <div>
-                <Label className="dark:text-gray-300">À propos</Label>
+                <Label className="dark:text-gray-300 mb-1.5 block">À propos</Label>
                 <textarea
-                  className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                  className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-800 dark:border-gray-700 dark:text-white resize-none"
                   value={data.about}
                   onChange={(e) => handleChange("about", e.target.value)}
+                  placeholder="Présentez-vous en quelques lignes..."
                 />
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  {data.about.length} caractères
+                </p>
               </div>
             </div>
           </AccordionContent>
         </AccordionItem>
 
         {/* EXPERIENCES */}
-        <AccordionItem value="experiences" className="border rounded-xl px-4 bg-white dark:bg-black dark:border-gray-800 shadow-sm">
-          <AccordionTrigger className="hover:no-underline dark:text-gray-100">Expériences</AccordionTrigger>
+        <AccordionItem value="experiences" className="border rounded-xl px-4 bg-white/60 dark:bg-black/60 dark:border-gray-800 shadow-sm backdrop-blur-sm">
+          <AccordionTrigger className="hover:no-underline dark:text-gray-100">
+            Expériences Professionnelles
+          </AccordionTrigger>
           <AccordionContent className="space-y-4 pt-2">
-            {data.experiences.map((exp, i) => (
-              <div key={i} className="relative pl-6 border-l-2 border-gray-200 dark:border-gray-700 space-y-3 pb-4">
-                <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                  <div className="w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-500" />
-                </div>
+            {data.experiences.length === 0 ? (
+              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                <p className="mb-2">Aucune expérience ajoutée</p>
+                <p className="text-sm">Cliquez sur "Ajouter une expérience" ci-dessous</p>
+              </div>
+            ) : (
+              data.experiences.map((exp, i) => (
+                <div key={i} className="relative pl-6 border-l-2 border-purple-200 dark:border-purple-900 space-y-3 pb-4 bg-gray-50 dark:bg-gray-900/30 p-4 rounded-lg">
+                  <div className="absolute -left-[9px] top-4 w-4 h-4 rounded-full bg-purple-500 dark:bg-purple-600 flex items-center justify-center shadow-md">
+                    <div className="w-2 h-2 rounded-full bg-white" />
+                  </div>
 
-                <div className="grid grid-cols-2 gap-2">
-                  <Input
-                    placeholder="Poste / Rôle"
-                    value={exp.role}
-                    onChange={(e) => updateItem("experiences", i, "role", e.target.value)}
-                    className="font-bold dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                  />
-                  <Input
-                    placeholder="Entreprise"
-                    value={exp.company}
-                    onChange={(e) => updateItem("experiences", i, "company", e.target.value)}
-                    className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <Input
-                    placeholder="Période (ex: 2020-2023)"
-                    value={exp.date}
-                    onChange={(e) => updateItem("experiences", i, "date", e.target.value)}
-                    className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                  />
-                  <div className="flex justify-end">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+                      Expérience #{i + 1}
+                    </span>
                     <Button
                       variant="ghost"
                       size="icon"
                       onClick={() => removeItem("experiences", i)}
-                      className="text-destructive hover:bg-destructive/10"
+                      className="text-destructive hover:bg-destructive/10 h-7 w-7"
+                      title="Supprimer cette expérience"
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <Label className="text-xs mb-1 block">Poste / Rôle *</Label>
+                      <Input
+                        placeholder="Ex: Développeur Web"
+                        value={exp.role}
+                        onChange={(e) => updateItem("experiences", i, "role", e.target.value)}
+                        className="font-semibold dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs mb-1 block">Entreprise *</Label>
+                      <Input
+                        placeholder="Ex: Tech Company"
+                        value={exp.company}
+                        onChange={(e) => updateItem("experiences", i, "company", e.target.value)}
+                        className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label className="text-xs mb-1 block">Période</Label>
+                    <Input
+                      placeholder="Ex: Jan 2020 - Présent"
+                      value={exp.date}
+                      onChange={(e) => updateItem("experiences", i, "date", e.target.value)}
+                      className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                    />
+                  </div>
+
+                  <div>
+                    <Label className="text-xs mb-1 block">Description</Label>
+                    <textarea
+                      className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-800 dark:border-gray-700 dark:text-white resize-none"
+                      value={exp.description || ""}
+                      onChange={(e) => updateItem("experiences", i, "description", e.target.value)}
+                      placeholder="Décrivez vos missions, réalisations et compétences développées..."
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
             <Button
               variant="outline"
               size="sm"
-              onClick={() => addItem("experiences", { role: "", company: "", date: "" })}
-              className="w-full border-dashed"
+              onClick={() => addItem("experiences", { role: "", company: "", date: "", description: "" })}
+              className="w-full border-dashed border-2 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-400"
             >
               <Plus className="w-4 h-4 mr-2" /> Ajouter une expérience
             </Button>
@@ -281,31 +450,38 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
         </AccordionItem>
 
         {/* COMPETENCES */}
-        <AccordionItem value="skills" className="border rounded-xl px-4 bg-white dark:bg-black dark:border-gray-800 shadow-sm">
-          <AccordionTrigger className="hover:no-underline dark:text-gray-100">Compétences</AccordionTrigger>
+        <AccordionItem value="skills" className="border rounded-xl px-4 bg-white/60 dark:bg-black/60 dark:border-gray-800 shadow-sm backdrop-blur-sm">
+          <AccordionTrigger className="hover:no-underline dark:text-gray-100">
+            Compétences
+          </AccordionTrigger>
           <AccordionContent className="space-y-4 pt-2">
-            <div className="space-y-2">
+            <div className="space-y-3">
               {data.skills.map((skill, i) => (
-                <div key={i} className="flex gap-2 items-center">
+                <div key={i} className="flex gap-2 items-center bg-gray-50 dark:bg-gray-900/30 p-3 rounded-lg">
                   <Input
                     className="flex-grow dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                    placeholder="Nom (ex: React)"
+                    placeholder="Ex: JavaScript"
                     value={skill.name}
                     onChange={(e) => updateItem("skills", i, "name", e.target.value)}
                   />
-                  <Input
-                    type="number"
-                    className="w-20 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                    placeholder="%"
-                    min="0" max="100"
-                    value={skill.level}
-                    onChange={(e) => updateItem("skills", i, "level", parseInt(e.target.value) || 0)}
-                  />
+                  <div className="flex items-center gap-2">
+                    <Input
+                      type="number"
+                      className="w-20 dark:bg-gray-800 dark:border-gray-700 dark:text-white text-center font-semibold"
+                      placeholder="%"
+                      min="0"
+                      max="100"
+                      value={skill.level}
+                      onChange={(e) => updateItem("skills", i, "level", Math.min(100, Math.max(0, parseInt(e.target.value) || 0)))}
+                    />
+                    <span className="text-sm text-gray-500">%</span>
+                  </div>
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => removeItem("skills", i)}
                     className="text-destructive hover:bg-destructive/10 shrink-0"
+                    title="Supprimer"
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
@@ -315,8 +491,8 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => addItem("skills", { name: "", level: 50 })}
-              className="w-full border-dashed dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+              onClick={() => addItem("skills", { name: "", level: 70 })}
+              className="w-full border-dashed border-2 hover:bg-purple-50 dark:hover:bg-purple-900/20"
             >
               <Plus className="w-4 h-4 mr-2" /> Ajouter une compétence
             </Button>
@@ -324,32 +500,36 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
         </AccordionItem>
 
         {/* LANGUAGES */}
-        <AccordionItem value="languages" className="border rounded-xl px-4 bg-white dark:bg-black dark:border-gray-800 shadow-sm">
-          <AccordionTrigger className="hover:no-underline dark:text-gray-100">Langues</AccordionTrigger>
+        <AccordionItem value="languages" className="border rounded-xl px-4 bg-white/60 dark:bg-black/60 dark:border-gray-800 shadow-sm backdrop-blur-sm">
+          <AccordionTrigger className="hover:no-underline dark:text-gray-100">
+            Langues
+          </AccordionTrigger>
           <AccordionContent className="space-y-4 pt-2">
-            {data.languages.map((lang, i) => (
-              <div key={i} className="flex gap-2">
-                <Input
-                  value={lang}
-                  onChange={(e) => updateItem("languages", i, null, e.target.value)}
-                  placeholder="Langue (ex: Anglais C1)"
-                  className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => removeItem("languages", i)}
-                  className="text-destructive hover:bg-destructive/10"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </div>
-            ))}
+            <div className="space-y-2">
+              {data.languages.map((lang, i) => (
+                <div key={i} className="flex gap-2 bg-gray-50 dark:bg-gray-900/30 p-3 rounded-lg">
+                  <Input
+                    value={lang}
+                    onChange={(e) => updateItem("languages", i, null, e.target.value)}
+                    placeholder="Ex: Français (Natif) ou Anglais (C1)"
+                    className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                  />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => removeItem("languages", i)}
+                    className="text-destructive hover:bg-destructive/10"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
             <Button
               variant="outline"
               size="sm"
               onClick={() => addItem("languages", "")}
-              className="w-full border-dashed dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+              className="w-full border-dashed border-2 hover:bg-purple-50 dark:hover:bg-purple-900/20"
             >
               <Plus className="w-4 h-4 mr-2" /> Ajouter une langue
             </Button>
@@ -357,60 +537,71 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
         </AccordionItem>
 
         {/* HOBBIES */}
-        <AccordionItem value="hobbies" className="border rounded-xl px-4 bg-white dark:bg-black dark:border-gray-800 shadow-sm">
-          <AccordionTrigger className="hover:no-underline dark:text-gray-100">Centres d'intérêt</AccordionTrigger>
+        <AccordionItem value="hobbies" className="border rounded-xl px-4 bg-white/60 dark:bg-black/60 dark:border-gray-800 shadow-sm backdrop-blur-sm">
+          <AccordionTrigger className="hover:no-underline dark:text-gray-100">
+            Centres d'intérêt
+          </AccordionTrigger>
           <AccordionContent className="space-y-4 pt-2">
-            {data.hobbies.map((hobby, i) => (
-              <div key={i} className="flex gap-2">
-                <Input
-                  value={hobby}
-                  onChange={(e) => updateItem("hobbies", i, null, e.target.value)}
-                  placeholder="Loisir"
-                  className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => removeItem("hobbies", i)}
-                  className="text-destructive hover:bg-destructive/10"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </div>
-            ))}
+            <div className="space-y-2">
+              {data.hobbies.map((hobby, i) => (
+                <div key={i} className="flex gap-2 bg-gray-50 dark:bg-gray-900/30 p-3 rounded-lg">
+                  <Input
+                    value={hobby}
+                    onChange={(e) => updateItem("hobbies", i, null, e.target.value)}
+                    placeholder="Ex: Photographie, Sport, Lecture..."
+                    className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                  />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => removeItem("hobbies", i)}
+                    className="text-destructive hover:bg-destructive/10"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
             <Button
               variant="outline"
               size="sm"
               onClick={() => addItem("hobbies", "")}
-              className="w-full border-dashed dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+              className="w-full border-dashed border-2 hover:bg-purple-50 dark:hover:bg-purple-900/20"
             >
-              <Plus className="w-4 h-4 mr-2" /> Ajouter un loisir
+              <Plus className="w-4 h-4 mr-2" /> Ajouter un centre d'intérêt
             </Button>
           </AccordionContent>
         </AccordionItem>
 
         {/* REFERENCES */}
-        <AccordionItem value="references" className="border rounded-xl px-4 bg-white dark:bg-black dark:border-gray-800 shadow-sm">
-          <AccordionTrigger className="hover:no-underline dark:text-gray-100">Références</AccordionTrigger>
+        <AccordionItem value="references" className="border rounded-xl px-4 bg-white/60 dark:bg-black/60 dark:border-gray-800 shadow-sm backdrop-blur-sm">
+          <AccordionTrigger className="hover:no-underline dark:text-gray-100">
+            Références
+          </AccordionTrigger>
           <AccordionContent className="space-y-4 pt-2">
             {data.references.map((ref, i) => (
-              <div key={i} className="border p-3 rounded-lg space-y-2 relative bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => removeItem("references", i)}
-                  className="absolute top-1 right-1 h-6 w-6 text-destructive hover:bg-destructive/10"
-                >
-                  <Trash2 className="w-3 h-3" />
-                </Button>
+              <div key={i} className="border-2 p-4 rounded-lg space-y-3 relative bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900/30 dark:to-gray-800/30 dark:border-gray-700">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+                    Référence #{i + 1}
+                  </span>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => removeItem("references", i)}
+                    className="h-7 w-7 text-destructive hover:bg-destructive/10"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                  </Button>
+                </div>
                 <Input
                   placeholder="Nom du référent"
                   value={ref.name}
                   onChange={(e) => updateItem("references", i, "name", e.target.value)}
-                  className="bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className="bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white font-semibold"
                 />
                 <Input
-                  placeholder="Contact (Email / Tél)"
+                  placeholder="Contact (Email ou Téléphone)"
                   value={ref.contact}
                   onChange={(e) => updateItem("references", i, "contact", e.target.value)}
                   className="bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
@@ -421,7 +612,7 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
               variant="outline"
               size="sm"
               onClick={() => addItem("references", { name: "", contact: "" })}
-              className="w-full border-dashed dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+              className="w-full border-dashed border-2 hover:bg-purple-50 dark:hover:bg-purple-900/20"
             >
               <Plus className="w-4 h-4 mr-2" /> Ajouter une référence
             </Button>

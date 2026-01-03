@@ -10,10 +10,21 @@ export default function CVTemplate({ data }: CVTemplateProps) {
 
             {/* HEADER */}
             <div className="text-white p-12" style={{ backgroundColor: data.color }}>
-                <div className="flex justify-between items-start">
-                    <div>
-                        <h1 className="text-4xl font-bold mb-2">{data.fullName}</h1>
-                        <p className="text-xl text-gray-300 font-light">{data.title}</p>
+                <div className="flex justify-between items-start gap-8">
+                    <div className="flex items-center gap-6">
+                        <div className="w-36 h-36 bg-white/10 rounded-full flex items-center justify-center p-1 backdrop-blur-sm">
+                            <div className="w-full h-full rounded-full overflow-hidden bg-white/10 flex items-center justify-center">
+                                {data.profileImage ? (
+                                    <img src={data.profileImage} alt={data.fullName} className="w-full h-full object-cover" />
+                                ) : (
+                                    <span className="text-white/40 font-bold text-sm">PHOTO</span>
+                                )}
+                            </div>
+                        </div>
+                        <div>
+                            <h1 className="text-4xl font-bold mb-2">{data.fullName}</h1>
+                            <p className="text-xl text-gray-300 font-light">{data.title}</p>
+                        </div>
                     </div>
                     <div className="text-right text-sm text-gray-400">
                         <p>{data.contact.address}</p>
@@ -42,7 +53,10 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                                 <div key={i} className="bg-white p-6 shadow-sm border-l-4 rounded-r-lg" style={{ borderColor: data.color }}>
                                     <h4 className="font-bold text-lg text-gray-800">{exp.role}</h4>
                                     <p className="font-medium mb-1" style={{ color: data.color }}>{exp.company}</p>
-                                    <p className="text-sm text-gray-400 italic">{exp.date}</p>
+                                    <p className="text-sm text-gray-400 italic mb-2">{exp.date}</p>
+                                    {exp.description && (
+                                        <p className="text-sm text-gray-700 whitespace-pre-line">{exp.description}</p>
+                                    )}
                                 </div>
                             ))}
                         </div>

@@ -33,6 +33,9 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                                     <span className="w-1 h-1 bg-gray-300 rounded-full" />
                                     <span className="text-sm text-gray-400 font-normal">{exp.date}</span>
                                 </div>
+                                {exp.description && (
+                                    <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line mt-2">{exp.description}</p>
+                                )}
                             </div>
                         ))}
                     </div>
@@ -53,7 +56,13 @@ export default function CVTemplate({ data }: CVTemplateProps) {
             {/* SIDEBAR (Right) */}
             <aside className="w-1/3 bg-gray-900 text-white p-8">
                 <div className="flex justify-center mb-8">
-                    <div className="w-32 h-32 rounded-full border-4 bg-gray-700" style={{ borderColor: data.color }} />
+                    <div className="w-40 h-40 rounded-full border-4 bg-gray-700 overflow-hidden flex items-center justify-center" style={{ borderColor: data.color }}>
+                        {data.profileImage ? (
+                            <img src={data.profileImage} alt={data.fullName} className="w-full h-full object-cover" />
+                        ) : (
+                            <span className="text-gray-400 font-bold uppercase tracking-widest">Photo</span>
+                        )}
+                    </div>
                 </div>
 
                 <div className="space-y-8">
