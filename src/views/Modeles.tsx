@@ -9,18 +9,18 @@ import Footer from "@/components/footer";
 /* =======================
    IMPORT DES IMAGES (PROVISOIRES)
 ======================= */
-import moderne01 from "@/assets/images/cv templates/Moderne/cv moderne 1.jpg";
-import moderne02 from "@/assets/images/cv templates/Moderne/cv moderne 2.jpg";
-import moderne03 from "@/assets/images/cv templates/Moderne/cv moderne 3.jpg";
+import moderne01 from "@/assets/images/cv-templates/moderne/moderne-1.jpg";
+import moderne02 from "@/assets/images/cv-templates/moderne/moderne-2.jpg";
+import moderne03 from "@/assets/images/cv-templates/moderne/moderne-3.jpg";
 
-import classique01 from "@/assets/images/cv templates/Classique/cv classique 1.jpg";
-import classique02 from "@/assets/images/cv templates/Classique/cv classique 2.jpg";
-import classique03 from "@/assets/images/cv templates/Classique/cv classique 3.jpg";
+import classique01 from "@/assets/images/cv-templates/classique/classique-1.jpg";
+import classique02 from "@/assets/images/cv-templates/classique/classique-2.jpg";
+import classique03 from "@/assets/images/cv-templates/classique/classique-3.jpg";
 
-import pro01 from "@/assets/images/cv templates/Pro/cv pro 1.jpg";
-import pro02 from "@/assets/images/cv templates/Pro/cv pro 2.jpg";
-import artiste01 from "@/assets/images/cv templates/Moderne/cv moderne 1.jpg"; // Placeholder
-import pro03 from "@/assets/timages/cv templates/Pro/cv pro 3.jpg";
+import pro01 from "@/assets/images/cv-templates/pro/pro-1.jpg";
+import pro02 from "@/assets/images/cv-templates/pro/pro-2.jpg";
+import pro03 from "@/assets/images/cv-templates/pro/pro-3.jpg";
+
 
 
 /* =======================
@@ -41,15 +41,19 @@ interface Model {
    DATA PROVISOIRE
 ======================= */
 const MODELS: Model[] = [
-    { id: "1", name: "Moderne 01", category: "Moderne", colors: ["Bleu", "Clair"], image: moderne01 },
-    { id: "2", name: "Classique 01", category: "Classique", colors: ["Noir", "Clair"], image: classique01 },
-    { id: "3", name: "Pro 01", category: "Professionnel", colors: ["Bleu", "Noir"], image: classique02 },
-    { id: "4", name: "Moderne 02", category: "Moderne", colors: ["Violet", "Noir"], image: moderne02 },
-    { id: "5", name: "Créatif 01", category: "Moderne", colors: ["Rouge", "Clair"], image: pro01 },
-    { id: "6", name: "Simple 01", category: "Classique", colors: ["Vert", "Clair"], image: pro02 },
-    { id: "7", name: "Tech 01", category: "Professionnel", colors: ["Noir", "Bleu"], image: moderne03 },
-    { id: "8", name: "Artiste 01", category: "Moderne", colors: ["Violet", "Clair"], image: artiste01 },
+  { id: "1", name: "Moderne 01", category: "Moderne", colors: ["Bleu", "Clair"], image: moderne01 },
+  { id: "2", name: "Moderne 02", category: "Moderne", colors: ["Violet", "Noir"], image: moderne02 },
+  { id: "3", name: "Moderne 03", category: "Moderne", colors: ["Bleu", "Noir"], image: moderne03 },
+
+  { id: "4", name: "Classique 01", category: "Classique", colors: ["Noir", "Clair"], image: classique01 },
+  { id: "5", name: "Classique 02", category: "Classique", colors: ["Vert", "Clair"], image: classique02 },
+  { id: "6", name: "Classique 03", category: "Classique", colors: ["Noir", "Clair"], image: classique03 },
+
+  { id: "7", name: "Pro 01", category: "Professionnel", colors: ["Bleu", "Noir"], image: pro01 },
+  { id: "8", name: "Pro 02", category: "Professionnel", colors: ["Noir", "Clair"], image: pro02 },
+  { id: "9", name: "Pro 03", category: "Professionnel", colors: ["Violet", "Noir"], image: pro03 },
 ];
+
 
 const CATEGORIES: Category[] = ["Tous", "Moderne", "Classique", "Professionnel"];
 
