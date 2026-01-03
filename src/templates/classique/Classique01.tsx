@@ -1,4 +1,5 @@
 import type { CVData } from "@/types";
+import { formatDateRange } from "@/lib/utils";
 
 interface CVTemplateProps {
     data: CVData;
@@ -62,6 +63,12 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                         <p className="text-xs leading-relaxed font-light">{data.about}</p>
                     </div>
                 )}
+                {data.objective && (
+                    <div className="px-6 mt-4">
+                        <h2 className="text-base font-bold uppercase mb-2 pb-1 border-b border-white/50 text-xs">Objectif</h2>
+                        <p className="text-xs leading-relaxed font-light italic">{data.objective}</p>
+                    </div>
+                )}
 
                 {/* PROFESSIONAL SKILLS */}
                 {data.skills.length > 0 && (
@@ -84,6 +91,22 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                                 </div>
                             </div>
                         ))}
+                    </div>
+                )}
+
+                {/* TOOLS */}
+                {data.tools && data.tools.length > 0 && (
+                    <div className="px-6 mt-8">
+                        <h2 className="text-base font-bold uppercase mb-4 pb-2 border-b-2 border-white">
+                            Outils
+                        </h2>
+                        <div className="flex flex-wrap gap-2">
+                            {data.tools.map((tool, i) => (
+                                <span key={i} className="text-xs bg-white/20 px-2 py-1 rounded">
+                                    {tool}
+                                </span>
+                            ))}
+                        </div>
                     </div>
                 )}
 
@@ -138,7 +161,7 @@ export default function CVTemplate({ data }: CVTemplateProps) {
 
                         {data.experiences.map((exp, i) => (
                             <div key={i} className="mb-6">
-                                {exp.date && <p className="text-sm font-semibold mb-1">{exp.date}</p>}
+                                <p className="text-sm font-semibold mb-1">{formatDateRange(exp.startDate, exp.endDate, exp.isCurrent)}</p>
                                 {(exp.role || exp.company) && (
                                     <h3 className="font-bold text-base mb-2">
                                         {exp.role} {exp.company && `- @${exp.company}`}
@@ -147,6 +170,34 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                                 {exp.description && (
                                     <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{exp.description}</p>
                                 )}
+                            </div>
+                        ))}
+                    </section>
+                )}
+
+                {/* EDUCATION */}
+                {data.education && data.education.length > 0 && (
+                    <section className="mb-10">
+                        <h2 className="text-xl font-bold uppercase mb-6 tracking-wide">Formations</h2>
+                        {data.education.map((edu, i) => (
+                            <div key={i} className="mb-4">
+                                <p className="text-sm font-semibold mb-1">{formatDateRange(edu.startDate, edu.endDate, edu.isCurrent)}</p>
+                                <h3 className="font-bold text-base">{edu.degree}</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">{edu.school}</p>
+                            </div>
+                        ))}
+                    </section>
+                )}
+
+                {/* CERTIFICATIONS */}
+                {data.certifications && data.certifications.length > 0 && (
+                    <section className="mb-10">
+                        <h2 className="text-xl font-bold uppercase mb-6 tracking-wide">Certifications</h2>
+                        {data.certifications.map((cert, i) => (
+                            <div key={i} className="mb-4">
+                                <p className="text-sm font-semibold mb-1">{cert.year}</p>
+                                <h3 className="font-bold text-base">{cert.name}</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">{cert.issuer}</p>
                             </div>
                         ))}
                     </section>

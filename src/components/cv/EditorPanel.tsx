@@ -111,7 +111,7 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
     };
 
     try {
-      await html2pdf().set(opt).from(element).save();
+      await html2pdf().set(opt as any).from(element).save();
       toast.update(toastId, {
         render: "✅ PDF téléchargé avec succès !",
         type: "success",
@@ -194,8 +194,8 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
               key={c}
               onClick={() => handleChange("color", c)}
               className={`w-10 h-10 rounded-full border-2 transition-all hover:scale-110 ${data.color === c
-                  ? "border-purple-600 scale-110 shadow-lg ring-2 ring-purple-300"
-                  : "border-gray-300 dark:border-gray-600 hover:border-gray-400"
+                ? "border-purple-600 scale-110 shadow-lg ring-2 ring-purple-300"
+                : "border-gray-300 dark:border-gray-600 hover:border-gray-400"
                 }`}
               style={{ backgroundColor: c }}
               title={c}
@@ -358,6 +358,16 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                   {data.about.length} caractères
                 </p>
               </div>
+
+              <div>
+                <Label className="dark:text-gray-300 mb-1.5 block">Objectif professionnel</Label>
+                <textarea
+                  className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-800 dark:border-gray-700 dark:text-white resize-none"
+                  value={data.objective || ""}
+                  onChange={(e) => handleChange("objective", e.target.value)}
+                  placeholder="Décrivez vos ambitions et ce que vous recherchez..."
+                />
+              </div>
             </div>
           </AccordionContent>
         </AccordionItem>
@@ -416,14 +426,39 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                     </div>
                   </div>
 
-                  <div>
-                    <Label className="text-xs mb-1 block">Période</Label>
-                    <Input
-                      placeholder="Ex: Jan 2020 - Présent"
-                      value={exp.date}
-                      onChange={(e) => updateItem("experiences", i, "date", e.target.value)}
-                      className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                    />
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        id={`exp-current-${i}`}
+                        checked={exp.isCurrent}
+                        onChange={(e) => updateItem("experiences", i, "isCurrent", e.target.checked)}
+                        className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                      />
+                      <Label htmlFor={`exp-current-${i}`} className="text-sm cursor-pointer">Toujours en cours (Présent)</Label>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <Label className="text-xs mb-1 block">Date de début</Label>
+                        <Input
+                          type="month"
+                          className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                          value={exp.startDate}
+                          onChange={(e) => updateItem("experiences", i, "startDate", e.target.value)}
+                        />
+                      </div>
+                      {!exp.isCurrent && (
+                        <div>
+                          <Label className="text-xs mb-1 block">Date de fin</Label>
+                          <Input
+                            type="month"
+                            className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                            value={exp.endDate}
+                            onChange={(e) => updateItem("experiences", i, "endDate", e.target.value)}
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   <div>
@@ -441,13 +476,85 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => addItem("experiences", { role: "", company: "", date: "", description: "" })}
+              onClick={() => addItem("experiences", { role: "", company: "", startDate: "", endDate: "", isCurrent: false, description: "" })}
               className="w-full border-dashed border-2 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-400"
             >
               <Plus className="w-4 h-4 mr-2" /> Ajouter une expérience
             </Button>
           </AccordionContent>
         </AccordionItem>
+
+        {/* EDUCATION */}
+        <AccordionItem value="education" className="border rounded-xl px-4 bg-white/60 dark:bg-black/60 dark:border-gray-800 shadow-sm backdrop-blur-sm">
+          <AccordionTrigger className="hover:no-underline dark:text-gray-100">
+            Formations & Études
+          </AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            {(data.education || []).length === 0 ? (
+              <div className="text-center py-6 text-gray-500 dark:text-gray-400">
+                <p>Aucune formation ajoutée</p>
+              </div>
+            ) : (
+              (data.education || []).map((edu, i) => (
+                <div key={i} className="relative pl-6 border-l-2 border-purple-200 dark:border-purple-900 space-y-3 pb-4 bg-gray-50 dark:bg-gray-900/30 p-4 rounded-lg">
+                  <div className="absolute -left-[9px] top-4 w-4 h-4 rounded-full bg-purple-500 dark:bg-purple-600 flex items-center justify-center shadow-md">
+                    <div className="w-2 h-2 rounded-full bg-white" />
+                  </div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">Formation #{i + 1}</span>
+                    <Button variant="ghost" size="icon" onClick={() => removeItem("education", i)} className="text-destructive hover:bg-destructive/10 h-7 w-7"><Trash2 className="w-4 h-4" /></Button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <Label className="text-xs mb-1 block">Diplôme / Info</Label>
+                      <Input placeholder="Ex: Master Informatique" value={edu.degree} onChange={(e) => updateItem("education", i, "degree", e.target.value)} className="dark:bg-gray-800 dark:border-gray-700 dark:text-white" />
+                    </div>
+                    <div>
+                      <Label className="text-xs mb-1 block">École / Établissement</Label>
+                      <Input placeholder="Ex: Université de Paris" value={edu.school} onChange={(e) => updateItem("education", i, "school", e.target.value)} className="dark:bg-gray-800 dark:border-gray-700 dark:text-white" />
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        id={`edu-current-${i}`}
+                        checked={edu.isCurrent}
+                        onChange={(e) => updateItem("education", i, "isCurrent", e.target.checked)}
+                        className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                      />
+                      <Label htmlFor={`edu-current-${i}`} className="text-sm cursor-pointer">Toujours en cours (Présent)</Label>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <Label className="text-xs mb-1 block">Date de début</Label>
+                        <Input
+                          type="month"
+                          className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                          value={edu.startDate}
+                          onChange={(e) => updateItem("education", i, "startDate", e.target.value)}
+                        />
+                      </div>
+                      {!edu.isCurrent && (
+                        <div>
+                          <Label className="text-xs mb-1 block">Date de fin</Label>
+                          <Input
+                            type="month"
+                            className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                            value={edu.endDate}
+                            onChange={(e) => updateItem("education", i, "endDate", e.target.value)}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+            <Button variant="outline" size="sm" onClick={() => addItem("education", { degree: "", school: "", startDate: "", endDate: "", isCurrent: false })} className="w-full border-dashed border-2 hover:bg-purple-50 dark:hover:bg-purple-900/20"><Plus className="w-4 h-4 mr-2" /> Ajouter une formation</Button>
+          </AccordionContent>
+        </AccordionItem>
+
 
         {/* COMPETENCES */}
         <AccordionItem value="skills" className="border rounded-xl px-4 bg-white/60 dark:bg-black/60 dark:border-gray-800 shadow-sm backdrop-blur-sm">
@@ -496,6 +603,52 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
             >
               <Plus className="w-4 h-4 mr-2" /> Ajouter une compétence
             </Button>
+          </AccordionContent>
+        </AccordionItem>
+
+        {/* OUTILS */}
+        <AccordionItem value="tools" className="border rounded-xl px-4 bg-white/60 dark:bg-black/60 dark:border-gray-800 shadow-sm backdrop-blur-sm">
+          <AccordionTrigger className="hover:no-underline dark:text-gray-100">
+            Outils & Logiciels
+          </AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            <div className="space-y-2">
+              {(data.tools || []).map((tool, i) => (
+                <div key={i} className="flex gap-2 bg-gray-50 dark:bg-gray-900/30 p-3 rounded-lg">
+                  <Input value={tool} onChange={(e) => updateItem("tools", i, null, e.target.value)} placeholder="Ex: VS Code, Figma, Jira..." className="dark:bg-gray-800 dark:border-gray-700 dark:text-white" />
+                  <Button variant="ghost" size="icon" onClick={() => removeItem("tools", i)} className="text-destructive hover:bg-destructive/10"><Trash2 className="w-4 h-4" /></Button>
+                </div>
+              ))}
+            </div>
+            <Button variant="outline" size="sm" onClick={() => addItem("tools", "")} className="w-full border-dashed border-2 hover:bg-purple-50 dark:hover:bg-purple-900/20"><Plus className="w-4 h-4 mr-2" /> Ajouter un outil</Button>
+          </AccordionContent>
+        </AccordionItem>
+
+        {/* CERTIFICATS */}
+        <AccordionItem value="certifications" className="border rounded-xl px-4 bg-white/60 dark:bg-black/60 dark:border-gray-800 shadow-sm backdrop-blur-sm">
+          <AccordionTrigger className="hover:no-underline dark:text-gray-100">
+            Certificats & Diplômes
+          </AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            {(data.certifications || []).length === 0 ? (
+              <div className="text-center py-6 text-gray-500 dark:text-gray-400"><p>Aucun certificat ajouté</p></div>
+            ) : (
+              (data.certifications || []).map((cert, i) => (
+                <div key={i} className="relative pl-6 border-l-2 border-purple-200 dark:border-purple-900 space-y-3 pb-4 bg-gray-50 dark:bg-gray-900/30 p-4 rounded-lg">
+                  <div className="absolute -left-[9px] top-4 w-4 h-4 rounded-full bg-purple-500 dark:bg-purple-600 flex items-center justify-center shadow-md"><div className="w-2 h-2 rounded-full bg-white" /></div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">Certificat #{i + 1}</span>
+                    <Button variant="ghost" size="icon" onClick={() => removeItem("certifications", i)} className="text-destructive hover:bg-destructive/10 h-7 w-7"><Trash2 className="w-4 h-4" /></Button>
+                  </div>
+                  <Input placeholder="Nom du certificat" value={cert.name} onChange={(e) => updateItem("certifications", i, "name", e.target.value)} className="dark:bg-gray-800 dark:border-gray-700 dark:text-white mb-2 font-semibold" />
+                  <div className="grid grid-cols-2 gap-3">
+                    <Input placeholder="Organisme" value={cert.issuer} onChange={(e) => updateItem("certifications", i, "issuer", e.target.value)} className="dark:bg-gray-800 dark:border-gray-700 dark:text-white" />
+                    <Input placeholder="Année" value={cert.year} onChange={(e) => updateItem("certifications", i, "year", e.target.value)} className="dark:bg-gray-800 dark:border-gray-700 dark:text-white" />
+                  </div>
+                </div>
+              ))
+            )}
+            <Button variant="outline" size="sm" onClick={() => addItem("certifications", { name: "", issuer: "", year: "" })} className="w-full border-dashed border-2 hover:bg-purple-50 dark:hover:bg-purple-900/20"><Plus className="w-4 h-4 mr-2" /> Ajouter un certificat</Button>
           </AccordionContent>
         </AccordionItem>
 

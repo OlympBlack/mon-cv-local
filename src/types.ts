@@ -1,7 +1,9 @@
 export interface Experience {
     role: string;
     company: string;
-    date: string;
+    startDate: string;
+    endDate: string;
+    isCurrent: boolean;
     description?: string;
 }
 
@@ -27,8 +29,22 @@ export interface CVData {
         linkedin?: string;
     };
     about: string;
+    objective?: string;
     experiences: Experience[];
+    education: {
+        degree: string;
+        school: string;
+        startDate: string;
+        endDate: string;
+        isCurrent: boolean;
+    }[];
+    certifications: {
+        name: string;
+        issuer: string;
+        year: string;
+    }[];
     skills: Skill[];
+    tools: string[]; // "Outils"
     languages: string[];
     hobbies: string[];
     references: Reference[];

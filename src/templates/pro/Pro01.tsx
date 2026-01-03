@@ -1,4 +1,5 @@
 import type { CVData } from "@/types";
+import { formatDateRange } from "@/lib/utils";
 
 interface CVTemplateProps {
     data: CVData;
@@ -6,7 +7,7 @@ interface CVTemplateProps {
 
 export default function CVTemplate({ data }: CVTemplateProps) {
     return (
-        <div className="w-[800px] min-h-[1100px] bg-white shadow-lg flex flex-col font-sans text-gray-800">
+        <div className="w-[800px] min-h-[1100px] bg-white dark:bg-slate-900 shadow-lg flex flex-col font-sans text-gray-800 dark:text-gray-100">
 
             {/* HEADER */}
             <header className="bg-slate-800 text-white p-10 flex justify-between items-center">
@@ -30,40 +31,55 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                 </div>
             </header>
 
-            <div className="flex flex-grow bg-slate-50">
-                <main className="w-2/3 p-10 bg-white">
+            <div className="flex flex-grow bg-slate-50 dark:bg-slate-900">
+                <main className="w-2/3 p-10 bg-white dark:bg-slate-900">
                     <Section title="Profil Professionnel" color={data.color}>
-                        <p className="text-gray-600 leading-relaxed">{data.about}</p>
+                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{data.about}</p>
+                        {data.objective && <p className="text-gray-600 dark:text-gray-400 leading-relaxed mt-2 italic">{data.objective}</p>}
                     </Section>
 
                     <Section title="Expérience" color={data.color}>
-                        <div className="space-y-8 border-l-2 border-slate-200 ml-3 pl-8 py-2">
+                        <div className="space-y-8 border-l-2 border-slate-200 dark:border-slate-700 ml-3 pl-8 py-2">
                             {data.experiences.map((exp, i) => (
                                 <div key={i} className="relative">
                                     <span className="absolute -left-[41px] top-1 w-5 h-5 rounded-full border-4 border-white shadow-sm" style={{ backgroundColor: data.color }} />
-                                    <h3 className="font-bold text-lg text-slate-800">{exp.role}</h3>
-                                    <div className="font-semibold text-sm mb-2" style={{ color: data.color }}>{exp.company} | {exp.date}</div>
+                                    <h3 className="font-bold text-lg text-slate-800 dark:text-gray-100">{exp.role}</h3>
+                                    <div className="font-semibold text-sm mb-2" style={{ color: data.color }}>{exp.company} | {formatDateRange(exp.startDate, exp.endDate, exp.isCurrent)}</div>
                                     {exp.description && (
-                                        <p className="text-sm text-gray-600 whitespace-pre-line">{exp.description}</p>
+                                        <p className="text-sm text-gray-600 dark:text-gray-300 whitespace-pre-line">{exp.description}</p>
                                     )}
                                 </div>
                             ))}
                         </div>
                     </Section>
 
+                    {data.education && data.education.length > 0 && (
+                        <Section title="Formations" color={data.color}>
+                            <div className="space-y-6 border-l-2 border-slate-200 dark:border-slate-700 ml-3 pl-8 py-2">
+                                {data.education.map((edu, i) => (
+                                    <div key={i} className="relative">
+                                        <span className="absolute -left-[37px] top-1.5 w-3 h-3 rounded-full bg-slate-400 border-2 border-white dark:border-slate-600" />
+                                        <h3 className="font-bold text-base text-slate-800 dark:text-gray-100">{edu.degree}</h3>
+                                        <p className="text-sm text-slate-600 dark:text-gray-400">{edu.school}, {formatDateRange(edu.startDate, edu.endDate, edu.isCurrent)}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </Section>
+                    )}
+
                     <Section title="Références" color={data.color}>
                         <div className="grid grid-cols-2 gap-4">
                             {data.references.map((ref, i) => (
-                                <div key={i} className="bg-slate-50 p-4 border rounded">
-                                    <p className="font-bold text-slate-800">{ref.name}</p>
-                                    <p className="text-sm text-slate-500">{ref.contact}</p>
+                                <div key={i} className="bg-slate-50 dark:bg-slate-800 p-4 border dark:border-slate-700 rounded">
+                                    <p className="font-bold text-slate-800 dark:text-gray-100">{ref.name}</p>
+                                    <p className="text-sm text-slate-500 dark:text-gray-400">{ref.contact}</p>
                                 </div>
                             ))}
                         </div>
                     </Section>
                 </main>
 
-                <aside className="w-1/3 p-10 bg-slate-100 border-l border-slate-200">
+                <aside className="w-1/3 p-10 bg-slate-100 dark:bg-slate-800 border-l border-slate-200 dark:border-slate-700">
                     <Section title="Compétences" small color={data.color}>
                         <div className="space-y-4">
                             {data.skills.map((skill, i) => (
@@ -71,7 +87,7 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                                     <div className="flex justify-between text-sm font-semibold mb-1">
                                         <span>{skill.name}</span>
                                     </div>
-                                    <div className="h-2 bg-slate-300 rounded-full overflow-hidden">
+                                    <div className="h-2 bg-slate-300 dark:bg-slate-700 rounded-full overflow-hidden">
                                         <div className="h-full" style={{ width: `${skill.level}%`, backgroundColor: data.color }} />
                                     </div>
                                 </div>
@@ -79,8 +95,31 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                         </div>
                     </Section>
 
+                    {data.tools && data.tools.length > 0 && (
+                        <Section title="Outils" small color={data.color}>
+                            <div className="flex flex-wrap gap-2">
+                                {data.tools.map((tool, i) => (
+                                    <span key={i} className="bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-2 py-1 rounded text-xs font-semibold text-slate-600 dark:text-gray-300">{tool}</span>
+                                ))}
+                            </div>
+                        </Section>
+                    )}
+
+                    {data.certifications && data.certifications.length > 0 && (
+                        <Section title="Certificats" small color={data.color}>
+                            <div className="space-y-3">
+                                {data.certifications.map((cert, i) => (
+                                    <div key={i} className="text-sm">
+                                        <p className="font-bold text-slate-700 dark:text-gray-200">{cert.name}</p>
+                                        <p className="text-xs text-slate-500 dark:text-gray-400">{cert.issuer}, {cert.year}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </Section>
+                    )}
+
                     <Section title="Langues" small color={data.color}>
-                        <ul className="space-y-2 text-sm font-medium text-slate-700">
+                        <ul className="space-y-2 text-sm font-medium text-slate-700 dark:text-gray-300">
                             {data.languages.map((lang, i) => (
                                 <li key={i} className="flex items-center gap-2">
                                     <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: data.color }} />
@@ -93,7 +132,7 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                     <Section title="Intérêts" small color={data.color}>
                         <div className="flex flex-wrap gap-2">
                             {data.hobbies.map((hobby, i) => (
-                                <span key={i} className="bg-white border border-slate-300 px-3 py-1 rounded text-xs font-semibold text-slate-600">
+                                <span key={i} className="bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-3 py-1 rounded text-xs font-semibold text-slate-600 dark:text-gray-300">
                                     {hobby}
                                 </span>
                             ))}
@@ -109,7 +148,7 @@ export default function CVTemplate({ data }: CVTemplateProps) {
 function Section({ title, children, small, color }: { title: string; children: React.ReactNode; small?: boolean; color: string }) {
     return (
         <section className="mb-10">
-            <h2 className={`font-bold uppercase text-slate-800 border-b-2 pb-2 mb-6 ${small ? 'text-lg' : 'text-xl'}`} style={{ borderColor: color }}>
+            <h2 className={`font-bold uppercase text-slate-800 dark:text-white border-b-2 pb-2 mb-6 ${small ? 'text-lg' : 'text-xl'}`} style={{ borderColor: color }}>
                 {title}
             </h2>
             <div>{children}</div>

@@ -26,7 +26,10 @@ export default function ModeleEditor() {
       {
         role: "Développeur Senior",
         company: "Tech Solutions",
-        date: "2020 - Présent",
+        startDate: "2020-01",
+        endDate: "",
+        isCurrent: true,
+        description: "Développement d'applications web full-stack, gestion d'équipe et mise en place de CI/CD.",
       },
     ],
     skills: [
@@ -37,6 +40,18 @@ export default function ModeleEditor() {
     languages: ["Français", "Anglais"],
     hobbies: ["Photography", "Voyages"],
     references: [],
+    education: [
+      {
+        degree: "Master Informatique",
+        school: "Université de Paris",
+        startDate: "2018-09",
+        endDate: "2020-06",
+        isCurrent: false,
+      }
+    ],
+    certifications: [],
+    tools: [],
+    objective: "",
   });
 
   if (!model) {
