@@ -97,36 +97,169 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
     setIsExporting(true);
     const toastId = toast.loading("Génération du PDF en cours...");
 
-    const opt = {
-      margin: 0,
-      filename: `CV_${data.fullName.replace(/\s+/g, "_") || "Document"}.pdf`,
-      image: { type: "jpeg" as const, quality: 0.98 },
-      html2canvas: {
-        scale: 2,
-        useCORS: true,
-        letterRendering: true,
-        logging: false
-      },
-      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+    // Clone l'élément pour le manipuler sans impacter l'affichage
+    const clone = element.cloneNode(true) as HTMLElement;
+    clone.classList.add("pdf-export");
+
+    // Positionner le clone par dessus mais caché visuellement par le z-index
+    // html2canvas n'aime pas trop les éléments hors viewport
+    clone.style.position = "fixed";
+    clone.style.left = "0px";
+    clone.style.top = "0px";
+    clone.style.zIndex = "-9999";
+    clone.style.transform = "none";
+    clone.style.margin = "0";
+    clone.style.padding = "0"; // Ensure no padding
+    clone.style.boxShadow = "none";
+    clone.style.width = "794px"; // ~210mm @ 96dpi
+    clone.style.height = "auto"; // Let it grow
+    clone.style.overflow = "visible"; // Ensure content isn't clipped
+    clone.style.backgroundColor = "white"; // Force background
+
+    document.body.appendChild(clone);
+
+    // CSS Sanitizer: Create a version of styles without oklch/oklab to allow html2canvas to work
+    let combinedCss = '';
+    Array.from(document.styleSheets).forEach(sheet => {
+      try {
+        // Try to access rules (might fail for cross-origin, but we catch it)
+        const rules = sheet.cssRules;
+        if (rules) {
+          Array.from(rules).forEach(rule => {
+            combinedCss += rule.cssText;
+          });
+        }
+      } catch (e) {
+        console.warn('Skipping stylesheet (CORS or other):', sheet.href);
+      }
+    });
+
+    // Replace modern color functions with a safe fallback
+    const safeCss = combinedCss.replace(/(oklch|oklab|lab|lch)\([^)]+\)/g, '#000000');
+
+    const safeStyle = document.createElement('style');
+    safeStyle.id = "safe-react-pdf-styles";
+    safeStyle.innerHTML = safeCss;
+    document.head.appendChild(safeStyle);
+
+    const checkImagesLoaded = async (el: HTMLElement) => {
+      const images = Array.from(el.querySelectorAll('img'));
+      const promises = images.map(img => {
+        if (img.complete) return Promise.resolve();
+        return new Promise((resolve) => {
+          img.onload = resolve;
+          img.onerror = resolve;
+        });
+      });
+      await Promise.all(promises);
+    };
+
+    // Fonction pour inliner tous les styles calculés (Layout + Couleurs + Typo)
+    const inlineStyles = (el: HTMLElement) => {
+      if (!el) return;
+
+      const properties = [
+        // Layout
+        'display', 'position', 'top', 'right', 'bottom', 'left', 'zIndex', 'float', 'clear',
+        'visibility', 'overflow', 'overflowX', 'overflowY',
+        // Flex / Grid
+        'flex', 'flexDirection', 'flexWrap', 'justifyContent', 'alignItems', 'alignContent', 'gap',
+        'gridTemplateColumns', 'gridTemplateRows', 'gridColumn', 'gridRow',
+        // Box Model
+        'width', 'height', 'minWidth', 'minHeight', 'maxWidth', 'maxHeight',
+        'margin', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft',
+        'padding', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
+        'borderWidth', 'borderStyle', 'borderColor', 'borderRadius', 'boxSizing',
+        // Typography
+        'fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'lineHeight', 'textAlign',
+        'textTransform', 'textDecoration', 'letterSpacing', 'whiteSpace', 'color',
+        // Visuals
+        'backgroundColor', 'background', 'opacity', 'transform', 'boxShadow',
+        'listStyle'
+      ];
+
+      // On parcourt tous les éléments de l'arbre
+      const walker = document.createTreeWalker(el, NodeFilter.SHOW_ELEMENT);
+      let currentNode = walker.currentNode as HTMLElement;
+
+      while (currentNode) {
+        // On récupère le style calculé par le navigateur (qui est en px/rgb/etc, propre)
+        const computed = window.getComputedStyle(currentNode);
+
+        properties.forEach(prop => {
+          // @ts-ignore
+          const val = computed[prop];
+          if (val && val !== 'none' && val !== 'auto' && val !== 'normal' && val !== '0px' && val !== 'rgba(0, 0, 0, 0)') {
+            // On fixe la valeur dans le style in-line
+            // @ts-ignore
+            currentNode.style[prop] = val;
+          }
+        });
+
+        // Cas spécifique pour les images pour assurer le ratio
+        if (currentNode.tagName === 'IMG') {
+          currentNode.style.maxWidth = '100%';
+        }
+
+        currentNode = walker.nextNode() as HTMLElement;
+      }
     };
 
     try {
-      await html2pdf().set(opt as any).from(element).save();
+      await checkImagesLoaded(clone);
+
+
+      const opt = {
+        margin: 0,
+        filename: `CV_${data.fullName.replace(/\s+/g, "_") || "CV"}.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          letterRendering: true,
+          scrollY: 0,
+          scrollX: 0,
+          // Ignore original styles/links to prevent crash, keep only our sanitized style
+          ignoreElements: (element: Element) => {
+            if (element.tagName === 'STYLE' || element.tagName === 'LINK') {
+              if (element.id === "safe-react-pdf-styles") return false;
+              // If it's a link, check if it's a stylesheet
+              if (element.tagName === 'LINK' && (element as HTMLLinkElement).rel === 'stylesheet') {
+                return true; // Ignore all linked stylesheets as we (tried to) capture them
+              }
+              if (element.tagName === 'STYLE') return true; // Ignore all other style tags
+            }
+            return false;
+          }
+        },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+      };
+
+      // @ts-ignore
+      await html2pdf().set(opt).from(clone).save();
+
       toast.update(toastId, {
         render: "✅ PDF téléchargé avec succès !",
         type: "success",
         isLoading: false,
         autoClose: 3000,
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error("Erreur export PDF:", e);
       toast.update(toastId, {
-        render: "❌ Erreur lors de l'export PDF.",
+        render: "❌ Erreur export (voir console)",
         type: "error",
         isLoading: false,
-        autoClose: 3000,
+        autoClose: 5000,
       });
     } finally {
+      if (document.body.contains(clone)) {
+        document.body.removeChild(clone);
+      }
+      const safeStyle = document.getElementById("safe-react-pdf-styles");
+      if (safeStyle && safeStyle.parentNode) {
+        safeStyle.parentNode.removeChild(safeStyle);
+      }
       setIsExporting(false);
     }
   };
@@ -359,7 +492,7 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                 </p>
               </div>
 
-              <div>
+              {/* <div>
                 <Label className="dark:text-gray-300 mb-1.5 block">Objectif professionnel</Label>
                 <textarea
                   className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-800 dark:border-gray-700 dark:text-white resize-none"
@@ -367,7 +500,7 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                   onChange={(e) => handleChange("objective", e.target.value)}
                   placeholder="Décrivez vos ambitions et ce que vous recherchez..."
                 />
-              </div>
+              </div> */}
             </div>
           </AccordionContent>
         </AccordionItem>

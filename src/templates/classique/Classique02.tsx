@@ -6,12 +6,13 @@ interface CVTemplateProps {
 }
 
 export default function CVTemplate({ data }: CVTemplateProps) {
+    const primaryColor = data.color || '#2f855a'; // Green default
     return (
         <div className="w-[800px] min-h-[1100px] bg-[#fdfbf7] dark:bg-slate-900 shadow-lg p-14 font-serif text-gray-900 dark:text-gray-100">
 
             <header className="text-center mb-12">
                 <h1 className="text-4xl font-bold uppercase mb-3">{data.fullName}</h1>
-                <div className="w-20 h-1 mx-auto mb-4" style={{ backgroundColor: data.color }} />
+                <div className="w-20 h-1 mx-auto mb-4" style={{ backgroundColor: primaryColor }} />
                 <p className="text-xl italic text-gray-600 dark:text-gray-400 mb-4">{data.title}</p>
                 <p className="font-sans text-sm text-gray-500 dark:text-gray-400">
                     {data.contact.address} • {data.contact.phone} • {data.contact.email}
@@ -19,12 +20,12 @@ export default function CVTemplate({ data }: CVTemplateProps) {
             </header>
 
             <div className="space-y-8">
-                <Section title="Profil" color={data.color}>
+                <Section title="Profil" color={primaryColor}>
                     <p className="text-justify leading-relaxed mb-2 text-gray-700 dark:text-gray-300">{data.about}</p>
                     {data.objective && <p className="text-justify leading-relaxed italic text-gray-700 dark:text-gray-400">{data.objective}</p>}
                 </Section>
 
-                <Section title="Expérience Professionnelle" color={data.color}>
+                <Section title="Expérience Professionnelle" color={primaryColor}>
                     {data.experiences.map((exp, i) => (
                         <div key={i} className="mb-6 page-break-inside-avoid">
                             <div className="flex justify-between items-baseline mb-1">
@@ -37,7 +38,7 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                 </Section>
 
                 <div className="grid grid-cols-2 gap-10">
-                    <Section title="Compétences" color={data.color}>
+                    <Section title="Compétences" color={primaryColor}>
                         <div className="flex flex-wrap gap-x-6 gap-y-2 mb-4">
                             {data.skills.map((skill, i) => (
                                 <span key={i} className="border-b border-gray-400 dark:border-gray-600 pb-1">{skill.name}</span>
@@ -55,7 +56,7 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                         )}
                     </Section>
 
-                    <Section title="Formation & Langues" color={data.color}>
+                    <Section title="Formation & Langues" color={primaryColor}>
                         <div className="space-y-4">
                             {data.education && data.education.length > 0 && (
                                 <div>
@@ -91,7 +92,7 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                     </Section>
                 </div>
 
-                <Section title="Références" color={data.color}>
+                <Section title="Références" color={primaryColor}>
                     <div className="flex gap-10">
                         {data.references.map((ref, i) => (
                             <div key={i}>

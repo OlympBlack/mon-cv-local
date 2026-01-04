@@ -6,13 +6,14 @@ export function InteractiveHoverButton({
   children,
   className,
   ...props
-}: React.ButtonHTMLAttributes<HTMLButtonElement>) {
+}: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <button
+    <div
       className={cn(
         "group bg-violet-700 text-white dark:hover:bg-white dark:hover:text-black relative w-auto cursor-pointer overflow-hidden rounded-full border p-2 px-6 text-center font-semibold",
         className
       )}
+      role="button"
       {...props}
     >
       <div className="flex items-center gap-2">
@@ -25,6 +26,6 @@ export function InteractiveHoverButton({
         <span>{children}</span>
         <ArrowRight />
       </div>
-    </button>
+    </div>
   )
 }

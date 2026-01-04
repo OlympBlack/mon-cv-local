@@ -13,13 +13,13 @@ export default function ModeleEditor() {
   const model = modelId ? cvModels[modelId] : null;
 
   const [cvData, setCvData] = useState<CVData>({
-    fullName: "Jean Dupont",
+    fullName: "Toto Pierre",
     title: "Développeur Web",
-    color: "#4f46e5",
+    color: model?.defaultColor || "#4f46e6",
     contact: {
-      phone: "+33 6 12 34 56 78",
-      email: "jean.dupont@example.com",
-      address: "Paris, France",
+      phone: "+229 01 00 00 00 00",
+      email: "toto.pierre@example.com",
+      address: "Cotonou, Bénin",
     },
     about: "Passionné par le développement web, je crée des applications modernes et performantes.",
     experiences: [
@@ -43,7 +43,7 @@ export default function ModeleEditor() {
     education: [
       {
         degree: "Master Informatique",
-        school: "Université de Paris",
+        school: "Université d'Abomey Calavi",
         startDate: "2018-09",
         endDate: "2020-06",
         isCurrent: false,
@@ -91,8 +91,7 @@ export default function ModeleEditor() {
                   <Template data={cvData} />
                 </PreviewWrapper>
               </div>
-              {/* Le footer s'affiche ici sur desktop si on le souhaite, ou reste global. 
-                  En mode mobile (flux naturel), le footer global (ligne 84) sera visible en bas de page. */}
+
             </div>
 
           </div>

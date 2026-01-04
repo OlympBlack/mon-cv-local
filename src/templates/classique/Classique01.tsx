@@ -11,7 +11,7 @@ export default function CVTemplate({ data }: CVTemplateProps) {
             {/* DIAGONAL RIBBON */}
             <div className="absolute -top-2 -left-2 overflow-hidden w-32 h-32 z-10">
                 <div className="absolute transform -rotate-45 bg-gray-500 dark:bg-gray-700 text-white text-center font-bold py-1 left-[-35px] top-[25px] w-[170px] text-xs">
-                    ● IMAGE NOT INCLUDED
+                    ● BANDE BANDE
                 </div>
             </div>
 

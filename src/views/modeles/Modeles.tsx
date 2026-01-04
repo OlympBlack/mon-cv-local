@@ -48,17 +48,21 @@ interface Model {
    DATA
 ======================= */
 const MODELS: Model[] = [
-  { id: "1", name: "Moderne 01", category: "Moderne", colors: ["Vert", "Clair"], image: moderne01 },
-  { id: "2", name: "Moderne 02", category: "Moderne", colors: ["Violet", "Clair"], image: moderne02 },
+{ id: "7", name: "Pro 01", category: "Professionnel", colors: ["Bleu", "Noir"], image: pro01 },
+
+  { id: "6", name: "Classique 03", category: "Classique", colors: ["Noir", "Clair"], image: classique03 },
   { id: "3", name: "Moderne 03", category: "Moderne", colors: ["Jaune", "Noir"], image: moderne03 },
 
   { id: "4", name: "Classique 01", category: "Classique", colors: ["Noir", "Clair"], image: classique01 },
-  { id: "5", name: "Classique 02", category: "Classique", colors: ["Vert", "Clair"], image: classique02 },
-  { id: "6", name: "Classique 03", category: "Classique", colors: ["Noir", "Clair"], image: classique03 },
-
-  { id: "7", name: "Pro 01", category: "Professionnel", colors: ["Bleu", "Noir"], image: pro01 },
   { id: "8", name: "Pro 02", category: "Professionnel", colors: ["Noir", "Clair"], image: pro02 },
   { id: "9", name: "Pro 03", category: "Professionnel", colors: ["Violet", "Noir"], image: pro03 },
+
+  { id: "1", name: "Moderne 01", category: "Moderne", colors: ["Vert", "Clair"], image: moderne01 },
+  { id: "2", name: "Moderne 02", category: "Moderne", colors: ["Violet", "Clair"], image: moderne02 },
+  
+  { id: "5", name: "Classique 02", category: "Classique", colors: ["Vert", "Clair"], image: classique02 },
+
+  
 ];
 
 const CATEGORIES: Category[] = ["Tous", "Moderne", "Classique", "Professionnel"];
@@ -131,7 +135,7 @@ export default function Modeles() {
               ))}
             </div>
 
-            <div className="flex items-center gap-3">
+            {/* <div className="flex items-center gap-3">
               <Palette className="w-4 h-4" />
               {COLORS.map((color) => (
                 <button
@@ -144,7 +148,7 @@ export default function Modeles() {
                   )}
                 />
               ))}
-            </div>
+            </div> */}
           </div>
 
           {/* Grid */}
