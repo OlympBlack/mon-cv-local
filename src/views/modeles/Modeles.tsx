@@ -10,17 +10,17 @@ import { useNavigate } from "react-router-dom";
 /* =======================
    IMAGES
 ======================= */
-import moderne01 from "@/assets/images/cv-templates/moderne/moderne-1.jpg";
-import moderne02 from "@/assets/images/cv-templates/moderne/moderne-2.jpg";
-import moderne03 from "@/assets/images/cv-templates/moderne/moderne-3.jpg";
+import moderne01 from "@/assets/images/cv-templates/Moderne/moderne-1.jpg";
+import moderne02 from "@/assets/images/cv-templates/Moderne/moderne-2.jpg";
+import moderne03 from "@/assets/images/cv-templates/Moderne/moderne-3.jpg";
 
-import classique01 from "@/assets/images/cv-templates/classique/classique-1.jpg";
-import classique02 from "@/assets/images/cv-templates/classique/classique-2.jpg";
-import classique03 from "@/assets/images/cv-templates/classique/classique-3.jpg";
+import classique01 from "@/assets/images/cv-templates/Classique/classique-1.jpg";
+import classique02 from "@/assets/images/cv-templates/Classique/classique-2.jpg";
+import classique03 from "@/assets/images/cv-templates/Classique/classique-3.jpg";
 
-import pro01 from "@/assets/images/cv-templates/pro/pro-1.jpg";
-import pro02 from "@/assets/images/cv-templates/pro/pro-2.jpg";
-import pro03 from "@/assets/images/cv-templates/pro/pro-3.jpg";
+import pro01 from "@/assets/images/cv-templates/Pro/pro-1.jpg";
+import pro02 from "@/assets/images/cv-templates/Pro/pro-2.jpg";
+import pro03 from "@/assets/images/cv-templates/Pro/pro-3.jpg";
 
 /* =======================
    TYPES
@@ -90,14 +90,14 @@ export default function Modeles() {
 
   return (
     <>
-    {/* Background */}
-            <div className="fixed inset-0 -z-10">
-                {/* Light */}
-                <div className="absolute inset-0 -z-10 dark:hidden h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]"></div>
-                {/* Dark */}
-                <div className="absolute inset-0 -z-10 hidden dark:block h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]"></div>
+      {/* Background */}
+      <div className="fixed inset-0 -z-10">
+        {/* Light */}
+        <div className="absolute inset-0 -z-10 dark:hidden h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]"></div>
+        {/* Dark */}
+        <div className="absolute inset-0 -z-10 hidden dark:block h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]"></div>
 
-            </div>
+      </div>
       <div className="relative min-h-screen flex flex-col">
         <Navbar />
 
