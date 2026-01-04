@@ -7,16 +7,18 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Trash2, Plus, Download, Printer, Loader2, Upload, X, ImageIcon } from "lucide-react";
+import { Trash2, Plus, Download, Printer, Loader2, Upload, X, ImageIcon, RotateCcw, LayoutTemplate } from "lucide-react";
 import type { CVData } from "@/types";
 import { useState, useRef } from "react";
 // @ts-ignore
 import html2pdf from "html2pdf.js";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 interface EditorPanelProps {
   data: CVData;
   onChange: (newData: CVData) => void;
+  onReset?: () => void;
 }
 
 const COLORS = [
@@ -33,7 +35,7 @@ const COLORS = [
   "#f97316",
 ];
 
-export default function EditorPanel({ data, onChange }: EditorPanelProps) {
+export default function EditorPanel({ data, onChange, onReset }: EditorPanelProps) {
   const [isExporting, setIsExporting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -88,6 +90,7 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
   };
 
   const handleExportPDF = async () => {
+    // Cibler le conteneur principal de prévisualisation
     const element = document.getElementById("cv-preview");
     if (!element) {
       toast.error("Impossible de trouver le CV à exporter.");
@@ -97,32 +100,67 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
     setIsExporting(true);
     const toastId = toast.loading("Génération du PDF en cours...");
 
-    // Clone l'élément pour le manipuler sans impacter l'affichage
+    // 1. Clone l'élément pour le manipuler sans impacter l'affichage
     const clone = element.cloneNode(true) as HTMLElement;
     clone.classList.add("pdf-export");
 
-    // Positionner le clone par dessus mais caché visuellement par le z-index
-    // html2canvas n'aime pas trop les éléments hors viewport
-    clone.style.position = "fixed";
+    // Add specific ID for PDF-safe wrapper targeting if needed, 
+    // though the class .pdf-export is the main driver.
+    // Ensure the clone wrapper background is white
+    clone.style.backgroundColor = "white";
+
+    // 2. Positionner le clone visible pour garantir le rendu (z-index élevé)
+    // Les navigateurs modernes peuvent ne pas "peindre" les éléments masqués ou z-index négatif.
+    clone.style.position = "absolute";
     clone.style.left = "0px";
     clone.style.top = "0px";
-    clone.style.zIndex = "-9999";
+    clone.style.zIndex = "9999"; // On top!
+    clone.style.width = "794px";
+    clone.style.minHeight = "1123px";
     clone.style.transform = "none";
     clone.style.margin = "0";
-    clone.style.padding = "0"; // Ensure no padding
-    clone.style.boxShadow = "none";
-    clone.style.width = "794px"; // ~210mm @ 96dpi
-    clone.style.height = "auto"; // Let it grow
-    clone.style.overflow = "visible"; // Ensure content isn't clipped
-    clone.style.backgroundColor = "white"; // Force background
+    clone.style.padding = "0";
+    clone.style.backgroundColor = "white"; // Ensure white background
+    // Force text colors to black by default handled by CSS, but ensure container is clean
 
     document.body.appendChild(clone);
 
-    // CSS Sanitizer: Create a version of styles without oklch/oklab to allow html2canvas to work
+    // 3. Enforce !important sur les styles inline critiques
+    // Cela permet aux styles inline définis dans le template (couleur principale)
+    // de surcharger la règle CSS globale .pdf-export * { color: black !important }
+    const enforceInlineImportant = (el: HTMLElement) => {
+      const walker = document.createTreeWalker(el, NodeFilter.SHOW_ELEMENT);
+      let recipient = walker.currentNode as HTMLElement;
+
+      // Process root element too if needed, though loop starts at root
+      // walker.currentNode is root initially, but nextNode moves to children.
+      // So we handle root separately or better, use a loop that hits root.
+      // efficient walk:
+      while (recipient) {
+        // Enforce color
+        if (recipient.style.color) {
+          recipient.style.setProperty('color', recipient.style.color, 'important');
+        }
+        // Enforce background-color
+        if (recipient.style.backgroundColor) {
+          recipient.style.setProperty('background-color', recipient.style.backgroundColor, 'important');
+        }
+        // Enforce border-color
+        if (recipient.style.borderColor) {
+          recipient.style.setProperty('border-color', recipient.style.borderColor, 'important');
+        }
+        recipient = walker.nextNode() as HTMLElement;
+      }
+    };
+
+    enforceInlineImportant(clone);
+
+    // 4. CSS Sanitizer: Remove unsupported colors from stylesheets
+    // We only keep layout styles from Tailwind, colors are handled by our reset + inline
     let combinedCss = '';
     Array.from(document.styleSheets).forEach(sheet => {
       try {
-        // Try to access rules (might fail for cross-origin, but we catch it)
+        if (sheet.href) return; // Skip external stylesheets if possible to avoid CORS, usually local styles are enough
         const rules = sheet.cssRules;
         if (rules) {
           Array.from(rules).forEach(rule => {
@@ -130,11 +168,13 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
           });
         }
       } catch (e) {
-        console.warn('Skipping stylesheet (CORS or other):', sheet.href);
+        console.warn('Skipping stylesheet:', e);
       }
     });
 
-    // Replace modern color functions with a safe fallback
+    // Strip oklab/oklch entirely by replacing with a fallback or keeping layout only.
+    // actually simply replacing them with black/white is safer for the renderer
+    // logic: if a rule has oklab, we replace the color with #000000.
     const safeCss = combinedCss.replace(/(oklch|oklab|lab|lch)\([^)]+\)/g, '#000000');
 
     const safeStyle = document.createElement('style');
@@ -154,60 +194,11 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
       await Promise.all(promises);
     };
 
-    // Fonction pour inliner tous les styles calculés (Layout + Couleurs + Typo)
-    const inlineStyles = (el: HTMLElement) => {
-      if (!el) return;
-
-      const properties = [
-        // Layout
-        'display', 'position', 'top', 'right', 'bottom', 'left', 'zIndex', 'float', 'clear',
-        'visibility', 'overflow', 'overflowX', 'overflowY',
-        // Flex / Grid
-        'flex', 'flexDirection', 'flexWrap', 'justifyContent', 'alignItems', 'alignContent', 'gap',
-        'gridTemplateColumns', 'gridTemplateRows', 'gridColumn', 'gridRow',
-        // Box Model
-        'width', 'height', 'minWidth', 'minHeight', 'maxWidth', 'maxHeight',
-        'margin', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft',
-        'padding', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
-        'borderWidth', 'borderStyle', 'borderColor', 'borderRadius', 'boxSizing',
-        // Typography
-        'fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'lineHeight', 'textAlign',
-        'textTransform', 'textDecoration', 'letterSpacing', 'whiteSpace', 'color',
-        // Visuals
-        'backgroundColor', 'background', 'opacity', 'transform', 'boxShadow',
-        'listStyle'
-      ];
-
-      // On parcourt tous les éléments de l'arbre
-      const walker = document.createTreeWalker(el, NodeFilter.SHOW_ELEMENT);
-      let currentNode = walker.currentNode as HTMLElement;
-
-      while (currentNode) {
-        // On récupère le style calculé par le navigateur (qui est en px/rgb/etc, propre)
-        const computed = window.getComputedStyle(currentNode);
-
-        properties.forEach(prop => {
-          // @ts-ignore
-          const val = computed[prop];
-          if (val && val !== 'none' && val !== 'auto' && val !== 'normal' && val !== '0px' && val !== 'rgba(0, 0, 0, 0)') {
-            // On fixe la valeur dans le style in-line
-            // @ts-ignore
-            currentNode.style[prop] = val;
-          }
-        });
-
-        // Cas spécifique pour les images pour assurer le ratio
-        if (currentNode.tagName === 'IMG') {
-          currentNode.style.maxWidth = '100%';
-        }
-
-        currentNode = walker.nextNode() as HTMLElement;
-      }
-    };
-
     try {
       await checkImagesLoaded(clone);
 
+      // Wait for layout/paint
+      await new Promise(resolve => setTimeout(resolve, 250));
 
       const opt = {
         margin: 0,
@@ -217,20 +208,8 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
           scale: 2,
           useCORS: true,
           letterRendering: true,
-          scrollY: 0,
-          scrollX: 0,
-          // Ignore original styles/links to prevent crash, keep only our sanitized style
-          ignoreElements: (element: Element) => {
-            if (element.tagName === 'STYLE' || element.tagName === 'LINK') {
-              if (element.id === "safe-react-pdf-styles") return false;
-              // If it's a link, check if it's a stylesheet
-              if (element.tagName === 'LINK' && (element as HTMLLinkElement).rel === 'stylesheet') {
-                return true; // Ignore all linked stylesheets as we (tried to) capture them
-              }
-              if (element.tagName === 'STYLE') return true; // Ignore all other style tags
-            }
-            return false;
-          }
+          // Ignore the safe style if we are using document styles, but we injected it.
+          // html2canvas reads from document.
         },
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
       };
@@ -247,7 +226,7 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
     } catch (e: any) {
       console.error("Erreur export PDF:", e);
       toast.update(toastId, {
-        render: "❌ Erreur export (voir console)",
+        render: "❌ Erreur export: " + (e.message || "inconnue"),
         type: "error",
         isLoading: false,
         autoClose: 5000,
@@ -256,9 +235,9 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
       if (document.body.contains(clone)) {
         document.body.removeChild(clone);
       }
-      const safeStyle = document.getElementById("safe-react-pdf-styles");
-      if (safeStyle && safeStyle.parentNode) {
-        safeStyle.parentNode.removeChild(safeStyle);
+      const safeStyleElement = document.getElementById("safe-react-pdf-styles");
+      if (safeStyleElement && safeStyleElement.parentNode) {
+        safeStyleElement.parentNode.removeChild(safeStyleElement);
       }
       setIsExporting(false);
     }
@@ -289,31 +268,48 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
     <div className="space-y-8 pb-20">
 
       {/* HEADER ACTIONS */}
-      <div className="flex items-center justify-between sticky top-0 md:-top-6 z-10 bg-white/90 dark:bg-black/90 backdrop-blur-md py-4 border-b dark:border-gray-800 mb-6">
-        <h2 className="text-2xl font-bold tracking-tight dark:text-white"> Éditeur CV</h2>
-        <div className="flex gap-2">
+      <div className="flex flex-col gap-4 sticky top-0 md:-top-6 z-10 bg-white/90 dark:bg-black/90 backdrop-blur-md py-4 border-b dark:border-gray-800 mb-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold tracking-tight dark:text-white"> Éditeur CV</h2>
+          <div className="flex gap-2">
+            <Link to="/modeles">
+              <Button variant="outline" size="sm" className="gap-2" title="Changer de modèle">
+                <LayoutTemplate className="w-4 h-4" />
+                <span className="hidden sm:inline">Modèles</span>
+              </Button>
+            </Link>
+            {onReset && (
+              <Button onClick={onReset} variant="ghost" size="sm" className="gap-2 text-destructive hover:bg-destructive/10" title="Réinitialiser tout">
+                <RotateCcw className="w-4 h-4" />
+                <span className="hidden sm:inline">Reset</span>
+              </Button>
+            )}
+          </div>
+        </div>
+
+        <div className="flex gap-2 w-full">
           <Button
             onClick={handlePrint}
             variant="secondary"
             size="sm"
-            className="gap-2 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+            className="flex-1 gap-2 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
             title="Imprimer le CV"
           >
             <Printer className="w-4 h-4" />
-            <span className="hidden sm:inline">Imprimer</span>
+            <span className="inline">Imprimer</span>
           </Button>
           <Button
             onClick={handleExportPDF}
             disabled={isExporting}
             size="sm"
-            className="gap-2 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white shadow-md"
+            className="flex-1 gap-2 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white shadow-md"
           >
             {isExporting ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
               <Download className="w-4 h-4" />
             )}
-            <span>{isExporting ? "Génération..." : "Export PDF"}</span>
+            <span>{isExporting ? "Génération..." : "Exporter PDF"}</span>
           </Button>
         </div>
       </div>
@@ -376,12 +372,11 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                       />
                       <Button
                         onClick={handleRemoveImage}
-                        variant="destructive"
                         size="icon"
-                        className="absolute -top-2 -right-2 h-8 w-8 rounded-full shadow-md"
+                        className="absolute -top-2 -right-2 h-8 w-8 rounded-full shadow-lg bg-red-600 hover:bg-red-700 text-white border-2 border-white transition-transform hover:scale-110"
                         title="Supprimer la photo"
                       >
-                        <X className="w-4 h-4" />
+                        <X className="w-5 h-5" />
                       </Button>
                     </div>
                     <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -431,7 +426,7 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                 <Input
                   value={data.fullName}
                   onChange={(e) => handleChange("fullName", e.target.value)}
-                  placeholder="Ex: Marie Dupont"
+                  placeholder="Ex: GBASSI jc"
                   className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                 />
               </div>

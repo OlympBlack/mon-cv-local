@@ -186,32 +186,30 @@
 
 /* PDF Export helper class */
 .pdf-export {
-  background-color: white !important;
-  color: black !important;
+  background-color: #ffffff !important;
+  color: #000000 !important;
   margin: 0 !important;
   padding: 0 !important;
   overflow: visible !important;
 }
 
+/* ⚠️ NE PAS forcer background-color ici */
 .pdf-export * {
   box-shadow: none !important;
-  background-color: transparent;
-  /* Allow parent bg to show unless overridden */
-  /* Ensure visibility if some parent hid it */
+  border-color: #000000 !important;
   visibility: visible !important;
   opacity: 1 !important;
   -webkit-print-color-adjust: exact !important;
   print-color-adjust: exact !important;
 }
 
-/* Specific overrides for the template root when exporting */
+/* A4 sizing */
 .pdf-export.w-\[800px\] {
   width: 794px !important;
-  /* A4 width */
   min-height: 1123px !important;
-  /* A4 height */
   box-shadow: none !important;
 }
+
 
 @keyframes zigzag-front {
   0% {

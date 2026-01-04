@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Palette, LayoutTemplate } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { LayoutTemplate } from "lucide-react";
+// import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
@@ -48,7 +48,7 @@ interface Model {
    DATA
 ======================= */
 const MODELS: Model[] = [
-{ id: "7", name: "Pro 01", category: "Professionnel", colors: ["Bleu", "Noir"], image: pro01 },
+  { id: "7", name: "Pro 01", category: "Professionnel", colors: ["Bleu", "Noir"], image: pro01 },
 
   { id: "6", name: "Classique 03", category: "Classique", colors: ["Noir", "Clair"], image: classique03 },
   { id: "3", name: "Moderne 03", category: "Moderne", colors: ["Jaune", "Noir"], image: moderne03 },
@@ -59,24 +59,24 @@ const MODELS: Model[] = [
 
   { id: "1", name: "Moderne 01", category: "Moderne", colors: ["Vert", "Clair"], image: moderne01 },
   { id: "2", name: "Moderne 02", category: "Moderne", colors: ["Violet", "Clair"], image: moderne02 },
-  
+
   { id: "5", name: "Classique 02", category: "Classique", colors: ["Vert", "Clair"], image: classique02 },
 
-  
+
 ];
 
 const CATEGORIES: Category[] = ["Tous", "Moderne", "Classique", "Professionnel"];
 
-const COLORS: { name: ColorFilter; class: string }[] = [
-  { name: "Tous", class: "bg-gradient-to-br from-gray-200 to-gray-400" },
-  { name: "Bleu", class: "bg-blue-500" },
-  { name: "Noir", class: "bg-black" },
-  { name: "Violet", class: "bg-purple-500" },
-  { name: "Clair", class: "bg-gray-100 border border-gray-300" },
-  { name: "Rouge", class: "bg-red-500" },
-  { name: "Vert", class: "bg-emerald-500" },
-  { name: "Jaune", class: "bg-yellow-400" },
-];
+// const COLORS: { name: ColorFilter; class: string }[] = [
+//   { name: "Tous", class: "bg-gradient-to-br from-gray-200 to-gray-400" },
+//   { name: "Bleu", class: "bg-blue-500" },
+//   { name: "Noir", class: "bg-black" },
+//   { name: "Violet", class: "bg-purple-500" },
+//   { name: "Clair", class: "bg-gray-100 border border-gray-300" },
+//   { name: "Rouge", class: "bg-red-500" },
+//   { name: "Vert", class: "bg-emerald-500" },
+//   { name: "Jaune", class: "bg-yellow-400" },
+// ];
 
 /* =======================
    PAGE
@@ -84,24 +84,24 @@ const COLORS: { name: ColorFilter; class: string }[] = [
 export default function Modeles() {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState<Category>("Tous");
-  const [selectedColor, setSelectedColor] = useState<ColorFilter>("Tous");
+  // const [selectedColor, setSelectedColor] = useState<ColorFilter>("Tous");
 
   const filteredModels = MODELS.filter((model) => {
     const matchCategory = selectedCategory === "Tous" || model.category === selectedCategory;
-    const matchColor = selectedColor === "Tous" || model.colors.includes(selectedColor);
-    return matchCategory && matchColor;
+    // const matchColor = selectedColor === "Tous" || model.colors.includes(selectedColor);
+    return matchCategory;
   });
 
   return (
     <>
-    {/* Background */}
-            <div className="fixed inset-0 -z-10">
-                {/* Light */}
-                <div className="absolute inset-0 -z-10 dark:hidden h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]"></div>
-                {/* Dark */}
-                <div className="absolute inset-0 -z-10 hidden dark:block h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]"></div>
+      {/* Background */}
+      <div className="fixed inset-0 -z-10">
+        {/* Light */}
+        <div className="absolute inset-0 -z-10 dark:hidden h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]"></div>
+        {/* Dark */}
+        <div className="absolute inset-0 -z-10 hidden dark:block h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]"></div>
 
-            </div>
+      </div>
       <div className="relative min-h-screen flex flex-col">
         <Navbar />
 
