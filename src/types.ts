@@ -25,6 +25,11 @@ export interface Tool {
 
 
 
+export interface Link {
+    name: string;
+    url: string;
+}
+
 export interface CVData {
     fullName: string;
     title: string;
@@ -54,6 +59,7 @@ export interface CVData {
 
     skills: Skill[];
     tools: Tool[];
+    links: Link[];
     languages: string[];
     hobbies: string[];
     references: Reference[];

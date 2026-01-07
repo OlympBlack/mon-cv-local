@@ -90,6 +90,27 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                             </Section>
                         )}
 
+                        {/* Ressources */}
+                        {data.links && data.links.length > 0 && (
+                            <Section title="Ressources">
+                                <ul className="space-y-2">
+                                    {data.links.map((link, i) => (
+                                        <li key={i}>
+                                            <a
+                                                href={link.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 transition-colors"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" /></svg>
+                                                <span className="truncate max-w-[150px]">{link.name}</span>
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </Section>
+                        )}
+
                         <Section title="Références">
                             <div className="grid grid-cols-2 gap-4">
                                 {data.references.map((ref, i) => (

@@ -146,6 +146,30 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                             </div>
                         )}
 
+                        {/* Liens / Ressources */}
+                        {data.links && data.links.length > 0 && (
+                            <div>
+                                <h3 className="font-bold tracking-widest text-sm mb-4 uppercase" style={{ color: data.color }}>
+                                    Ressources
+                                </h3>
+                                <div className="space-y-3">
+                                    {data.links.map((link, i) => (
+                                        <div key={i}>
+                                            <a
+                                                href={link.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-sm text-gray-300 hover:text-white flex items-center gap-2"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" /></svg>
+                                                {link.name}
+                                            </a>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
                         {data.certifications && data.certifications.length > 0 && (
                             <div>
                                 <h3 className="font-bold tracking-widest text-sm mb-4 uppercase" style={{ color: data.color }}>
@@ -187,8 +211,8 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                         </div>
                     </div>
                 </aside>
-            </div>
-        </PdfSafeWrapper>
+            </div >
+        </PdfSafeWrapper >
     );
 }
 

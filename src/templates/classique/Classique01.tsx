@@ -116,6 +116,25 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                         </div>
                     )}
 
+                    {/* LINKS */}
+                    {data.links && data.links.length > 0 && (
+                        <div className="px-6 mt-8">
+                            <h2 className="text-base font-bold uppercase mb-4 pb-2 border-b-2 border-white">
+                                Ressources
+                            </h2>
+                            <ul className="text-xs space-y-2">
+                                {data.links.map((link, i) => (
+                                    <li key={i}>
+                                        <a href={link.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:underline text-gray-200">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" /></svg>
+                                            <span className="truncate">{link.name}</span>
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
                     {/* LANGUAGE */}
                     {data.languages.length > 0 && (
                         <div className="px-6 mt-8">

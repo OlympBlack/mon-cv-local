@@ -7,7 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Trash2, Plus, Download, Printer, Loader2, Upload, X, ImageIcon, RotateCcw, LayoutTemplate } from "lucide-react";
+import { Trash2, Plus, Download, Printer, Loader2, Upload, X, ImageIcon, RotateCcw, LayoutTemplate, Link as LinkIcon } from "lucide-react";
 import type { CVData } from "@/types";
 import { useState, useRef } from "react";
 // @ts-ignore
@@ -248,7 +248,8 @@ export default function EditorPanel({ data, onChange, onReset }: EditorPanelProp
 
   // Generic list handlers
   const addItem = (field: keyof CVData, item: any) => {
-    onChange({ ...data, [field]: [...(data[field] as any[]), item] });
+    const list = (data[field] as any[]) || [];
+    onChange({ ...data, [field]: [...list, item] });
   };
 
   const updateItem = (field: keyof CVData, index: number, key: string | null, value: any) => {
@@ -845,6 +846,52 @@ export default function EditorPanel({ data, onChange, onReset }: EditorPanelProp
               </p>
             </div>
 
+          </AccordionContent>
+        </AccordionItem>
+
+        {/* RESSOURCES (Liens) */}
+        <AccordionItem value="links" className="border rounded-xl px-4 bg-white/60 dark:bg-black/60 dark:border-gray-800 shadow-sm backdrop-blur-sm">
+          <AccordionTrigger className="hover:no-underline dark:text-gray-100">
+            Ressources
+          </AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            {(data.links || []).length === 0 ? (
+              <div className="text-center py-6 text-gray-500 dark:text-gray-400"><p>Aucun lien ajouté</p></div>
+            ) : (
+              (data.links || []).map((link, i) => (
+                <div key={i} className="relative pl-6 border-l-2 border-purple-200 dark:border-purple-900 space-y-3 pb-4 bg-gray-50 dark:bg-gray-900/30 p-4 rounded-lg">
+                  <div className="absolute -left-[9px] top-4 w-4 h-4 rounded-full bg-purple-500 dark:bg-purple-600 flex items-center justify-center shadow-md">
+                    <LinkIcon className="w-2 h-2 text-white" />
+                  </div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">Lien #{i + 1}</span>
+                    <Button variant="ghost" size="icon" onClick={() => removeItem("links", i)} className="text-destructive hover:bg-destructive/10 h-7 w-7">
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  <Input
+                    placeholder="Nom de la ressource (ex: Portfolio)"
+                    value={link.name}
+                    onChange={(e) => updateItem("links", i, "name", e.target.value)}
+                    className="dark:bg-gray-800 dark:border-gray-700 dark:text-white mb-2 font-semibold"
+                  />
+                  <Input
+                    placeholder="URL (ex: https://mon-portfolio.com)"
+                    value={link.url}
+                    onChange={(e) => updateItem("links", i, "url", e.target.value)}
+                    className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                  />
+                </div>
+              ))
+            )}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => addItem("links", { name: "", url: "" })}
+              className="w-full border-dashed border-2 hover:bg-purple-50 dark:hover:bg-purple-900/20"
+            >
+              <Plus className="w-4 h-4 mr-2" /> Ajouter un lien
+            </Button>
           </AccordionContent>
         </AccordionItem>
 

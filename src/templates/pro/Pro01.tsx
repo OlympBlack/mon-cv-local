@@ -113,6 +113,21 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                             </Section>
                         )}
 
+                        {data.links && data.links.length > 0 && (
+                            <Section title="Ressources" small color={data.color}>
+                                <ul className="space-y-2 text-sm">
+                                    {data.links.map((link, i) => (
+                                        <li key={i}>
+                                            <a href={link.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:underline text-slate-700">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" /></svg>
+                                                <span className="truncate">{link.name}</span>
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </Section>
+                        )}
+
                         {data.certifications && data.certifications.length > 0 && (
                             <Section title="Certificats" small color={data.color}>
                                 <div className="space-y-3">

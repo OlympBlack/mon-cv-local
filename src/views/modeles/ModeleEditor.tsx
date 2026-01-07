@@ -41,9 +41,12 @@ export default function ModeleEditor() {
       { name: "TypeScript", level: 85 },
       { name: "Node.js", level: 80 },
     ],
-    languages: ["Français", "Anglais"],
-    hobbies: ["Photography", "Voyages"],
-    references: [],
+    languages: ["Français (Natif)", "Anglais (B2)"],
+    hobbies: ["Photographie", "Voyages", "Jeux vidéo"],
+    links: [],
+    references: [
+      { name: "John Doe", contact: "john.doe@email.com" }
+    ],
     education: [
       {
         degree: "Master Informatique",
@@ -63,7 +66,8 @@ export default function ModeleEditor() {
     try {
       const saved = localStorage.getItem("cv_auto_save_v1");
       if (saved) {
-        return JSON.parse(saved);
+        // Fusionner avec les données par défaut pour garantir que les nouveaux champs (ex: links) existent
+        return { ...getDefaultData(), ...JSON.parse(saved) };
       }
     } catch (e) {
       console.warn("Erreur lecture localStorage", e);
