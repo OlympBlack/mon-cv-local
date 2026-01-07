@@ -9,7 +9,7 @@ interface CVTemplateProps {
 export default function CVTemplate({ data }: CVTemplateProps) {
     return (
         <PdfSafeWrapper>
-            <div className="w-[800px] min-h-[1100px] bg-white dark:bg-slate-900 shadow-lg flex font-sans text-gray-800 dark:text-gray-100">
+            <div className="w-[800px] min-h-[1100px] bg-white   shadow-lg flex font-sans text-gray-800 dark:text-gray-100">
                 {/* MAIN CONTENT (Left) */}
                 <main className="w-2/3 p-10">
                     <header className="mb-10">

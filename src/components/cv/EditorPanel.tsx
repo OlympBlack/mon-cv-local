@@ -274,14 +274,14 @@ export default function EditorPanel({ data, onChange, onReset }: EditorPanelProp
           <div className="flex gap-2">
             <Link to="/modeles">
               <Button variant="outline" size="sm" className="gap-2" title="Changer de modèle">
-                <LayoutTemplate className="w-4 h-4" />
-                <span className="hidden sm:inline">Modèles</span>
+                <LayoutTemplate className="w-4 h-4 dark:text-white" />
+                <span className="hidden sm:inline dark:text-white">Modèles</span>
               </Button>
             </Link>
             {onReset && (
               <Button onClick={onReset} variant="ghost" size="sm" className="gap-2 text-destructive hover:bg-destructive/10" title="Réinitialiser tout">
-                <RotateCcw className="w-4 h-4" />
-                <span className="hidden sm:inline">Reset</span>
+                <RotateCcw className="w-4 h-4 dark:text-white" />
+                <span className="hidden sm:inline dark:text-white">Reset</span>
               </Button>
             )}
           </div>
@@ -458,7 +458,7 @@ export default function EditorPanel({ data, onChange, onReset }: EditorPanelProp
                     type="tel"
                     value={data.contact.phone}
                     onChange={(e) => handleNestedChange("contact", "phone", e.target.value)}
-                    placeholder="+33 6 12 34 56 78"
+                    placeholder="+229 6 12 34 56 78"
                     className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                   />
                 </div>
@@ -469,18 +469,18 @@ export default function EditorPanel({ data, onChange, onReset }: EditorPanelProp
                 <Input
                   value={data.contact.address}
                   onChange={(e) => handleNestedChange("contact", "address", e.target.value)}
-                  placeholder="Ex: 123 Rue de Paris, 75001 Paris"
+                  placeholder="Ex: 123 Rue de Cotonou, 45001 Cotonou"
                   className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                 />
               </div>
 
               <div>
-                <Label className="dark:text-gray-300 mb-1.5 block">À propos</Label>
+                <Label className="dark:text-gray-300 mb-1.5 block">Objectif professionnel</Label>
                 <textarea
                   className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-800 dark:border-gray-700 dark:text-white resize-none"
                   value={data.about}
                   onChange={(e) => handleChange("about", e.target.value)}
-                  placeholder="Présentez-vous en quelques lignes..."
+                  placeholder="Décrivez vos ambitions et ce que vous recherchez..."
                 />
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   {data.about.length} caractères
@@ -488,12 +488,12 @@ export default function EditorPanel({ data, onChange, onReset }: EditorPanelProp
               </div>
 
               {/* <div>
-                <Label className="dark:text-gray-300 mb-1.5 block">Objectif professionnel</Label>
+                <Label className="dark:text-gray-300 mb-1.5 block">A Propos</Label>
                 <textarea
                   className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-800 dark:border-gray-700 dark:text-white resize-none"
                   value={data.objective || ""}
                   onChange={(e) => handleChange("objective", e.target.value)}
-                  placeholder="Décrivez vos ambitions et ce que vous recherchez..."
+                  placeholder="Présentez-vous en quelques lignes..."
                 />
               </div> */}
             </div>
@@ -639,7 +639,7 @@ export default function EditorPanel({ data, onChange, onReset }: EditorPanelProp
                     </div>
                     <div>
                       <Label className="text-xs mb-1 block">École / Établissement</Label>
-                      <Input placeholder="Ex: Université de Paris" value={edu.school} onChange={(e) => updateItem("education", i, "school", e.target.value)} className="dark:bg-gray-800 dark:border-gray-700 dark:text-white" />
+                      <Input placeholder="Ex: Université d'Abomey Calavi" value={edu.school} onChange={(e) => updateItem("education", i, "school", e.target.value)} className="dark:bg-gray-800 dark:border-gray-700 dark:text-white" />
                     </div>
                   </div>
                   <div className="space-y-3">

@@ -7,7 +7,8 @@ import EditorPanel from "@/components/cv/EditorPanel";
 import PreviewWrapper from "@/components/cv/PreviewWrapper";
 import { Button } from "@/components/ui/button";
 import { TriangleAlert } from "lucide-react";
-import Footer from "../../components/footer";
+// import Footer from "../../components/footer";
+import { motion } from "framer-motion";
 
 
 export default function ModeleEditor() {
@@ -117,7 +118,7 @@ export default function ModeleEditor() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 lg:h-full">
 
             {/* Colonne gauche : Formulaire */}
-            <div className="lg:col-span-5 xl:col-span-4 lg:h-full lg:overflow-y-auto border-r border-gray-200 dark:border-gray-800 scrollbar-hide">
+            <div className="lg:col-span-5 xl:col-span-4 lg:h-full lg:overflow-y-auto scrollbar-hide">
               <div className="p-6">
                 <EditorPanel data={cvData} onChange={setCvData} onReset={handleReset} />
               </div>
@@ -150,7 +151,7 @@ export default function ModeleEditor() {
                   Êtes-vous sûr de vouloir tout effacer ? Cette action est irréversible et supprimera toutes vos données actuelles.
                 </p>
               </div>
-              <div className="flex gap-3 w-full pt-2">
+              <div className="flex gap-3 w-full pt-2 dark:text-white" >
                 <Button
                   variant="outline"
                   className="flex-1"
@@ -160,7 +161,7 @@ export default function ModeleEditor() {
                 </Button>
                 <Button
                   variant="destructive"
-                  className="flex-1 bg-red-600 hover:bg-red-700"
+                  className="flex-1 bg-red-600 hover:bg-red-700 dark:hover:bg-red-700 dark:bg-red-600"
                   onClick={confirmReset}
                 >
                   Tout effacer
@@ -171,7 +172,19 @@ export default function ModeleEditor() {
         </div>
       )}
 
-      <Footer />
+       {/* footer */}
+        <motion.footer
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+        viewport={{ once: true }}
+        className="bg-[#1a0b3f] text-white py-5 rounded-lg m-2"
+        >
+
+        <div className="max-w-7xl mx-auto px-6 border-t border-gray-700  text-gray-400 text-sm text-center">
+            © {new Date().getFullYear()} MON CV LOCAL, Tous droits réservés
+        </div>
+        </motion.footer>
     </>
   );
 }
