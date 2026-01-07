@@ -1,5 +1,5 @@
 import type { CVData } from "@/types";
-import { formatDateRange } from "@/lib/utils";
+import { formatDateRange, getToolIconUrl } from "@/lib/utils";
 import { PdfSafeWrapper } from "@/components/cv/PdfSafeWrapper";
 
 interface CVTemplateProps {
@@ -122,11 +122,25 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                                 <h3 className="font-bold tracking-widest text-sm mb-4 uppercase" style={{ color: data.color }}>
                                     Outils
                                 </h3>
-                                <div className="flex flex-wrap gap-2">
+                                <div className="flex flex-wrap gap-3">
                                     {data.tools.map((tool, i) => (
-                                        <span key={i} className="text-xs bg-gray-800 px-2 py-1 rounded text-gray-300">
-                                            {tool}
-                                        </span>
+                                        <div key={i} className="bg-gray-800 p-2 rounded border border-gray-700 hover:border-gray-600 transition-colors" title={tool.label}>
+                                            <img
+                                                src={getToolIconUrl(tool)}
+                                                alt={tool.label}
+                                                // Moderne03 sidebar is dark (bg-gray-900), so we might want white icons depending on the icon color. 
+                                                // Simple Icons are usually black or brand color. 
+                                                // For dark bg, often white is preferred if brand color isn't sufficient contrast.
+                                                // However, simpleicons 'default' is brand color.
+                                                // Let's invert if we want white, or keep as is.
+                                                // The previous text was white/gray.
+                                                // Let's add class invert for dark mode if using black icons, but simpleicons CDN serves colored icons by default?
+                                                // Actually CDN serves brand colors normally.
+                                                // Let's try adding brightness filter or just keep as is.
+                                                // User asked for "Professional rendering".
+                                                className="w-5 h-5 object-contain filter hover:brightness-110"
+                                            />
+                                        </div>
                                     ))}
                                 </div>
                             </div>

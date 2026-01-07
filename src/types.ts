@@ -16,6 +16,14 @@ export interface Reference {
     name: string;
     contact: string;
 }
+export interface Tool {
+    id: string;
+    label: string;
+    source: "simpleicons" | "custom";
+    imageUrl?: string;
+};
+
+
 
 export interface CVData {
     fullName: string;
@@ -43,8 +51,9 @@ export interface CVData {
         issuer: string;
         year: string;
     }[];
+
     skills: Skill[];
-    tools: string[]; // "Outils"
+    tools: Tool[];
     languages: string[];
     hobbies: string[];
     references: Reference[];

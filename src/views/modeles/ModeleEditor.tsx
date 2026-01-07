@@ -119,7 +119,7 @@ export default function ModeleEditor() {
 
             {/* Colonne gauche : Formulaire */}
             <div className="lg:col-span-5 xl:col-span-4 lg:h-full lg:overflow-y-auto scrollbar-hide">
-              <div className="p-6">
+              <div className="p-6 pb-40">
                 <EditorPanel data={cvData} onChange={setCvData} onReset={handleReset} />
               </div>
             </div>
@@ -172,19 +172,19 @@ export default function ModeleEditor() {
         </div>
       )}
 
-       {/* footer */}
-        <motion.footer
+      {/* footer */}
+      <motion.footer
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
         viewport={{ once: true }}
         className="bg-[#1a0b3f] text-white py-5 rounded-lg m-2"
-        >
+      >
 
         <div className="max-w-7xl mx-auto px-6 border-t border-gray-700  text-gray-400 text-sm text-center">
-            © {new Date().getFullYear()} MON CV LOCAL, Tous droits réservés
+          © {new Date().getFullYear()} MON CV LOCAL, Tous droits réservés
         </div>
-        </motion.footer>
+      </motion.footer>
     </>
   );
 }

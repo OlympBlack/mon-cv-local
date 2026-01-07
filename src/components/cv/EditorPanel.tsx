@@ -14,6 +14,7 @@ import { useState, useRef } from "react";
 import html2pdf from "html2pdf.js";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { ToolAutocomplete } from "../ToolAutocomplete";
 
 interface EditorPanelProps {
   data: CVData;
@@ -37,6 +38,8 @@ const COLORS = [
 
 export default function EditorPanel({ data, onChange, onReset }: EditorPanelProps) {
   const [isExporting, setIsExporting] = useState(false);
+  const [showCustomTool, setShowCustomTool] = useState(false);
+  const [customToolName, setCustomToolName] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (field: keyof CVData, value: any) => {
@@ -735,22 +738,116 @@ export default function EditorPanel({ data, onChange, onReset }: EditorPanelProp
         </AccordionItem>
 
         {/* OUTILS */}
-        <AccordionItem value="tools" className="border rounded-xl px-4 bg-white/60 dark:bg-black/60 dark:border-gray-800 shadow-sm backdrop-blur-sm">
+        <AccordionItem
+          value="tools"
+          className="border rounded-xl px-4 bg-white/60 dark:bg-black/60 dark:border-gray-800 shadow-sm backdrop-blur-sm"
+        >
           <AccordionTrigger className="hover:no-underline dark:text-gray-100">
             Outils & Logiciels
           </AccordionTrigger>
+
           <AccordionContent className="space-y-4 pt-2">
-            <div className="space-y-2">
+
+            {/* Liste des outils ajoutés */}
+            <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 gap-3 mb-6">
               {(data.tools || []).map((tool, i) => (
-                <div key={i} className="flex gap-2 bg-gray-50 dark:bg-gray-900/30 p-3 rounded-lg">
-                  <Input value={tool} onChange={(e) => updateItem("tools", i, null, e.target.value)} placeholder="Ex: VS Code, Figma, Jira..." className="dark:bg-gray-800 dark:border-gray-700 dark:text-white" />
-                  <Button variant="ghost" size="icon" onClick={() => removeItem("tools", i)} className="text-destructive hover:bg-destructive/10"><Trash2 className="w-4 h-4" /></Button>
+                <div
+                  key={i}
+                  className="group relative flex items-center justify-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-2 rounded-xl hover:shadow-md transition-all duration-200 hover:border-purple-300 dark:hover:border-purple-700 hover:bg-purple-50/50 dark:hover:bg-purple-900/10 w-12 h-12"
+                  title={tool.label}
+                >
+                  <img
+                    src={tool.source === 'custom' && tool.imageUrl ? tool.imageUrl : `https://cdn.simpleicons.org/${tool.id}`}
+                    alt={tool.label}
+                    className="w-6 h-6 object-contain dark:invert transition-transform hover:scale-110"
+                    loading="lazy"
+                  />
+                  <button
+                    onClick={() => removeItem("tools", i)}
+                    className="absolute -top-2 -right-2 bg-red-100 text-red-600 rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm hover:bg-red-200 z-10"
+                    title="Supprimer"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
                 </div>
               ))}
             </div>
-            <Button variant="outline" size="sm" onClick={() => addItem("tools", "")} className="w-full border-dashed border-2 hover:bg-purple-50 dark:hover:bg-purple-900/20"><Plus className="w-4 h-4 mr-2" /> Ajouter un outil</Button>
+
+            {/* Zone d'ajout (Autocomplete ou Custom) */}
+            <div className="bg-gray-50 dark:bg-gray-900/40 p-4 rounded-xl border border-dashed border-gray-300 dark:border-gray-700 space-y-3">
+              <div className="flex justify-between items-center">
+                <Label className="text-sm font-medium dark:text-gray-300">Ajouter un outil</Label>
+                {!showCustomTool ? (
+                  <Button variant="ghost" size="sm" onClick={() => setShowCustomTool(true)} className="text-xs text-purple-600 hover:text-purple-700 h-auto py-1 px-2">
+                    + Autre (Custom)
+                  </Button>
+                ) : (
+                  <Button variant="ghost" size="sm" onClick={() => setShowCustomTool(false)} className="text-xs text-gray-500 hover:text-gray-700 h-auto py-1 px-2">
+                    Retour liste
+                  </Button>
+                )}
+              </div>
+
+              {showCustomTool ? (
+                <div className="flex gap-2">
+                  <Input
+                    value={customToolName}
+                    onChange={(e) => setCustomToolName(e.target.value)}
+                    placeholder="Nom de l'outil (ex: Photoshop)"
+                    className="dark:bg-gray-800 dark:border-gray-700"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && customToolName.trim()) {
+                        addItem("tools", {
+                          id: `custom-${Date.now()}`,
+                          label: customToolName,
+                          source: 'custom',
+                          imageUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(customToolName)}&background=random&color=fff&size=128`
+                        });
+                        setCustomToolName("");
+                        setShowCustomTool(false);
+                      }
+                    }}
+                  />
+                  <Button
+                    onClick={() => {
+                      if (customToolName.trim()) {
+                        addItem("tools", {
+                          id: `custom-${Date.now()}`,
+                          label: customToolName,
+                          source: 'custom',
+                          imageUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(customToolName)}&background=random&color=fff&size=128`
+                        });
+                        setCustomToolName("");
+                        setShowCustomTool(false);
+                      }
+                    }}
+                    disabled={!customToolName.trim()}
+                    size="icon"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="relative pb-2">
+                  <ToolAutocomplete
+                    onSelect={(tool) =>
+                      addItem("tools", {
+                        id: tool.id,
+                        label: tool.label,
+                        source: 'simpleicons'
+                      })
+                    }
+                  />
+                </div>
+              )}
+              <p className="text-[10px] text-gray-400 dark:text-gray-500 text-center">
+                {showCustomTool ? "Saisissez le nom pour générer une icône." : "Recherchez parmi +3000 icônes dev & design."}
+              </p>
+            </div>
+
           </AccordionContent>
         </AccordionItem>
+
 
         {/* CERTIFICATS */}
         <AccordionItem value="certifications" className="border rounded-xl px-4 bg-white/60 dark:bg-black/60 dark:border-gray-800 shadow-sm backdrop-blur-sm">

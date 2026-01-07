@@ -1,5 +1,5 @@
 import type { CVData } from "@/types";
-import { formatDateRange } from "@/lib/utils";
+import { formatDateRange, getToolIconUrl } from "@/lib/utils";
 import { PdfSafeWrapper } from "@/components/cv/PdfSafeWrapper";
 
 interface CVTemplateProps {
@@ -107,9 +107,13 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                             <Section title="Outils" small color={primaryColor}>
                                 <div className="flex flex-wrap gap-2">
                                     {data.tools.map((tool, i) => (
-                                        <span key={i} className="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded text-xs font-semibold text-slate-700 dark:text-gray-200">
-                                            {tool}
-                                        </span>
+                                        <div key={i} className="bg-slate-200 dark:bg-slate-700 p-1.5 rounded" title={tool.label}>
+                                            <img
+                                                src={getToolIconUrl(tool)}
+                                                alt={tool.label}
+                                                className="w-4 h-4 object-contain"
+                                            />
+                                        </div>
                                     ))}
                                 </div>
                             </Section>
