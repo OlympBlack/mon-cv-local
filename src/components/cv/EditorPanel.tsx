@@ -215,6 +215,7 @@ export default function EditorPanel({ data, onChange, onReset }: EditorPanelProp
           // html2canvas reads from document.
         },
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
       };
 
       // @ts-ignore

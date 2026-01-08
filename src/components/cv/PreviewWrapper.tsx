@@ -1,47 +1,52 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
-export default function PreviewWrapper({ children }: { children: React.ReactNode }) {
+interface PreviewWrapperProps {
+  children: React.ReactNode;
+}
+
+export default function PreviewWrapper({ children }: PreviewWrapperProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
 
   useEffect(() => {
-    const updateScale = () => {
-      if (containerRef.current) {
-        const containerWidth = containerRef.current.offsetWidth;
-        // Assuming CV width is ~800px. 
-        // We subtract padding (32px total) from container width
-        const availableWidth = containerWidth - 32;
-        const newScale = Math.min(availableWidth / 800, 1);
-        setScale(newScale);
+    const handleResize = () => {
+      if (!containerRef.current || !contentRef.current) return;
+
+      const containerWidth = containerRef.current.clientWidth;
+      const cvWidth = 794; // A4 width in px (96 DPI)
+      const padding = 32; // 2rem padding
+
+      const availableWidth = containerWidth - padding;
+
+      // Scale down if container is smaller than CV
+      if (availableWidth < cvWidth) {
+        setScale(availableWidth / cvWidth);
+      } else {
+        setScale(1);
       }
     };
 
-    window.addEventListener("resize", updateScale);
-    updateScale(); // Initial call
-
-    // Observer for container resize (e.g. sidebar toggle)
-    const resizeObserver = new ResizeObserver(updateScale);
-    if (containerRef.current) resizeObserver.observe(containerRef.current);
-
-    return () => {
-      window.removeEventListener("resize", updateScale);
-      resizeObserver.disconnect();
-    }
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
     <div
+      id="cv-preview"
       ref={containerRef}
-      className="bg-muted/30 rounded-xl flex justify-center items-start overflow-hidden origin-top"
+      className="w-full h-full flex items-start justify-center overflow-visible"
     >
       <div
-        id="cv-preview"
+        ref={contentRef}
         style={{
           transform: `scale(${scale})`,
           transformOrigin: "top center",
-          marginTop: "20px",
+          width: "794px", // Force A4 width container
+          minHeight: "1123px",
         }}
-        className="transition-transform duration-200"
+        className="shadow-2xl print:shadow-none print:transform-none origin-top print:w-full"
       >
         {children}
       </div>
