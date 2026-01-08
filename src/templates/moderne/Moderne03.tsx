@@ -1,5 +1,5 @@
 import type { CVData } from "@/types";
-import { formatDateRange } from "@/lib/utils";
+import { formatDateRange, getToolIconUrl } from "@/lib/utils";
 import { PdfSafeWrapper } from "@/components/cv/PdfSafeWrapper";
 
 interface CVTemplateProps {
@@ -9,7 +9,7 @@ interface CVTemplateProps {
 export default function CVTemplate({ data }: CVTemplateProps) {
     return (
         <PdfSafeWrapper>
-            <div className="w-[800px] min-h-[1100px] bg-white dark:bg-slate-900 shadow-lg flex font-sans text-gray-800 dark:text-gray-100">
+            <div className="w-[800px] min-h-[1100px] bg-white   shadow-lg flex font-sans text-gray-800 dark:text-gray-100">
                 {/* MAIN CONTENT (Left) */}
                 <main className="w-2/3 p-10">
                     <header className="mb-10">
@@ -122,11 +122,49 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                                 <h3 className="font-bold tracking-widest text-sm mb-4 uppercase" style={{ color: data.color }}>
                                     Outils
                                 </h3>
-                                <div className="flex flex-wrap gap-2">
+                                <div className="flex flex-wrap gap-3">
                                     {data.tools.map((tool, i) => (
-                                        <span key={i} className="text-xs bg-gray-800 px-2 py-1 rounded text-gray-300">
-                                            {tool}
-                                        </span>
+                                        <div key={i} className="bg-gray-800 p-2 rounded border border-gray-700 hover:border-gray-600 transition-colors" title={tool.label}>
+                                            <img
+                                                src={getToolIconUrl(tool)}
+                                                alt={tool.label}
+                                                // Moderne03 sidebar is dark (bg-gray-900), so we might want white icons depending on the icon color. 
+                                                // Simple Icons are usually black or brand color. 
+                                                // For dark bg, often white is preferred if brand color isn't sufficient contrast.
+                                                // However, simpleicons 'default' is brand color.
+                                                // Let's invert if we want white, or keep as is.
+                                                // The previous text was white/gray.
+                                                // Let's add class invert for dark mode if using black icons, but simpleicons CDN serves colored icons by default?
+                                                // Actually CDN serves brand colors normally.
+                                                // Let's try adding brightness filter or just keep as is.
+                                                // User asked for "Professional rendering".
+                                                className="w-5 h-5 object-contain filter hover:brightness-110"
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Liens / Ressources */}
+                        {data.links && data.links.length > 0 && (
+                            <div>
+                                <h3 className="font-bold tracking-widest text-sm mb-4 uppercase" style={{ color: data.color }}>
+                                    Ressources
+                                </h3>
+                                <div className="space-y-3">
+                                    {data.links.map((link, i) => (
+                                        <div key={i}>
+                                            <a
+                                                href={link.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-sm text-gray-300 hover:text-white flex items-center gap-2"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" /></svg>
+                                                {link.name}
+                                            </a>
+                                        </div>
                                     ))}
                                 </div>
                             </div>
@@ -173,8 +211,8 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                         </div>
                     </div>
                 </aside>
-            </div>
-        </PdfSafeWrapper>
+            </div >
+        </PdfSafeWrapper >
     );
 }
 

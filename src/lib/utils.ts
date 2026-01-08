@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import type { Tool } from "@/types"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -24,4 +25,15 @@ export function formatDateRange(startDate: string, endDate: string, isCurrent: b
   if (!endDate) return start; // Open ended if no end date provided? Or just start.
   const end = format(endDate);
   return `${start} - ${end}`;
+}
+
+export function getToolIconUrl(tool: Tool, variant?: 'white'): string {
+  if (tool.source === "custom" && tool.imageUrl) {
+    return tool.imageUrl;
+  }
+  const baseUrl = `https://cdn.simpleicons.org/${tool.id}`;
+  if (variant === 'white') {
+    return `${baseUrl}/white`;
+  }
+  return baseUrl;
 }

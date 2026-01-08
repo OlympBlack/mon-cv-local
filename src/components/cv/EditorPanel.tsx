@@ -7,13 +7,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Trash2, Plus, Download, Printer, Loader2, Upload, X, ImageIcon, RotateCcw, LayoutTemplate } from "lucide-react";
+import { Trash2, Plus, Download, Printer, Loader2, Upload, X, ImageIcon, RotateCcw, LayoutTemplate, Link as LinkIcon } from "lucide-react";
 import type { CVData } from "@/types";
 import { useState, useRef } from "react";
 // @ts-ignore
 import html2pdf from "html2pdf.js";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { ToolAutocomplete } from "../ToolAutocomplete";
 
 interface EditorPanelProps {
   data: CVData;
@@ -37,6 +38,8 @@ const COLORS = [
 
 export default function EditorPanel({ data, onChange, onReset }: EditorPanelProps) {
   const [isExporting, setIsExporting] = useState(false);
+  const [showCustomTool, setShowCustomTool] = useState(false);
+  const [customToolName, setCustomToolName] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (field: keyof CVData, value: any) => {
@@ -212,6 +215,7 @@ export default function EditorPanel({ data, onChange, onReset }: EditorPanelProp
           // html2canvas reads from document.
         },
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
       };
 
       // @ts-ignore
@@ -245,7 +249,8 @@ export default function EditorPanel({ data, onChange, onReset }: EditorPanelProp
 
   // Generic list handlers
   const addItem = (field: keyof CVData, item: any) => {
-    onChange({ ...data, [field]: [...(data[field] as any[]), item] });
+    const list = (data[field] as any[]) || [];
+    onChange({ ...data, [field]: [...list, item] });
   };
 
   const updateItem = (field: keyof CVData, index: number, key: string | null, value: any) => {
@@ -274,14 +279,14 @@ export default function EditorPanel({ data, onChange, onReset }: EditorPanelProp
           <div className="flex gap-2">
             <Link to="/modeles">
               <Button variant="outline" size="sm" className="gap-2" title="Changer de modèle">
-                <LayoutTemplate className="w-4 h-4" />
-                <span className="hidden sm:inline">Modèles</span>
+                <LayoutTemplate className="w-4 h-4 dark:text-white" />
+                <span className="hidden sm:inline dark:text-white">Modèles</span>
               </Button>
             </Link>
             {onReset && (
               <Button onClick={onReset} variant="ghost" size="sm" className="gap-2 text-destructive hover:bg-destructive/10" title="Réinitialiser tout">
-                <RotateCcw className="w-4 h-4" />
-                <span className="hidden sm:inline">Reset</span>
+                <RotateCcw className="w-4 h-4 dark:text-white" />
+                <span className="hidden sm:inline dark:text-white">Reset</span>
               </Button>
             )}
           </div>
@@ -458,7 +463,7 @@ export default function EditorPanel({ data, onChange, onReset }: EditorPanelProp
                     type="tel"
                     value={data.contact.phone}
                     onChange={(e) => handleNestedChange("contact", "phone", e.target.value)}
-                    placeholder="+33 6 12 34 56 78"
+                    placeholder="+229 6 12 34 56 78"
                     className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                   />
                 </div>
@@ -469,18 +474,18 @@ export default function EditorPanel({ data, onChange, onReset }: EditorPanelProp
                 <Input
                   value={data.contact.address}
                   onChange={(e) => handleNestedChange("contact", "address", e.target.value)}
-                  placeholder="Ex: 123 Rue de Paris, 75001 Paris"
+                  placeholder="Ex: 123 Rue de Cotonou, 45001 Cotonou"
                   className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                 />
               </div>
 
               <div>
-                <Label className="dark:text-gray-300 mb-1.5 block">À propos</Label>
+                <Label className="dark:text-gray-300 mb-1.5 block">Objectif professionnel</Label>
                 <textarea
                   className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-800 dark:border-gray-700 dark:text-white resize-none"
                   value={data.about}
                   onChange={(e) => handleChange("about", e.target.value)}
-                  placeholder="Présentez-vous en quelques lignes..."
+                  placeholder="Décrivez vos ambitions et ce que vous recherchez..."
                 />
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   {data.about.length} caractères
@@ -488,12 +493,12 @@ export default function EditorPanel({ data, onChange, onReset }: EditorPanelProp
               </div>
 
               {/* <div>
-                <Label className="dark:text-gray-300 mb-1.5 block">Objectif professionnel</Label>
+                <Label className="dark:text-gray-300 mb-1.5 block">A Propos</Label>
                 <textarea
                   className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-800 dark:border-gray-700 dark:text-white resize-none"
                   value={data.objective || ""}
                   onChange={(e) => handleChange("objective", e.target.value)}
-                  placeholder="Décrivez vos ambitions et ce que vous recherchez..."
+                  placeholder="Présentez-vous en quelques lignes..."
                 />
               </div> */}
             </div>
@@ -639,7 +644,7 @@ export default function EditorPanel({ data, onChange, onReset }: EditorPanelProp
                     </div>
                     <div>
                       <Label className="text-xs mb-1 block">École / Établissement</Label>
-                      <Input placeholder="Ex: Université de Paris" value={edu.school} onChange={(e) => updateItem("education", i, "school", e.target.value)} className="dark:bg-gray-800 dark:border-gray-700 dark:text-white" />
+                      <Input placeholder="Ex: Université d'Abomey Calavi" value={edu.school} onChange={(e) => updateItem("education", i, "school", e.target.value)} className="dark:bg-gray-800 dark:border-gray-700 dark:text-white" />
                     </div>
                   </div>
                   <div className="space-y-3">
@@ -735,22 +740,162 @@ export default function EditorPanel({ data, onChange, onReset }: EditorPanelProp
         </AccordionItem>
 
         {/* OUTILS */}
-        <AccordionItem value="tools" className="border rounded-xl px-4 bg-white/60 dark:bg-black/60 dark:border-gray-800 shadow-sm backdrop-blur-sm">
+        <AccordionItem
+          value="tools"
+          className="border rounded-xl px-4 bg-white/60 dark:bg-black/60 dark:border-gray-800 shadow-sm backdrop-blur-sm"
+        >
           <AccordionTrigger className="hover:no-underline dark:text-gray-100">
             Outils & Logiciels
           </AccordionTrigger>
+
           <AccordionContent className="space-y-4 pt-2">
-            <div className="space-y-2">
+
+            {/* Liste des outils ajoutés */}
+            <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 gap-3 mb-6">
               {(data.tools || []).map((tool, i) => (
-                <div key={i} className="flex gap-2 bg-gray-50 dark:bg-gray-900/30 p-3 rounded-lg">
-                  <Input value={tool} onChange={(e) => updateItem("tools", i, null, e.target.value)} placeholder="Ex: VS Code, Figma, Jira..." className="dark:bg-gray-800 dark:border-gray-700 dark:text-white" />
-                  <Button variant="ghost" size="icon" onClick={() => removeItem("tools", i)} className="text-destructive hover:bg-destructive/10"><Trash2 className="w-4 h-4" /></Button>
+                <div
+                  key={i}
+                  className="group relative flex items-center justify-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-2 rounded-xl hover:shadow-md transition-all duration-200 hover:border-purple-300 dark:hover:border-purple-700 hover:bg-purple-50/50 dark:hover:bg-purple-900/10 w-12 h-12"
+                  title={tool.label}
+                >
+                  <img
+                    src={tool.source === 'custom' && tool.imageUrl ? tool.imageUrl : `https://cdn.simpleicons.org/${tool.id}`}
+                    alt={tool.label}
+                    className="w-6 h-6 object-contain dark:invert transition-transform hover:scale-110"
+                    loading="lazy"
+                  />
+                  <button
+                    onClick={() => removeItem("tools", i)}
+                    className="absolute -top-2 -right-2 bg-red-100 text-red-600 rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm hover:bg-red-200 z-10"
+                    title="Supprimer"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
                 </div>
               ))}
             </div>
-            <Button variant="outline" size="sm" onClick={() => addItem("tools", "")} className="w-full border-dashed border-2 hover:bg-purple-50 dark:hover:bg-purple-900/20"><Plus className="w-4 h-4 mr-2" /> Ajouter un outil</Button>
+
+            {/* Zone d'ajout (Autocomplete ou Custom) */}
+            <div className="bg-gray-50 dark:bg-gray-900/40 p-4 rounded-xl border border-dashed border-gray-300 dark:border-gray-700 space-y-3">
+              <div className="flex justify-between items-center">
+                <Label className="text-sm font-medium dark:text-gray-300">Ajouter un outil</Label>
+                {!showCustomTool ? (
+                  <Button variant="ghost" size="sm" onClick={() => setShowCustomTool(true)} className="text-xs text-purple-600 hover:text-purple-700 h-auto py-1 px-2">
+                    + Autre (Custom)
+                  </Button>
+                ) : (
+                  <Button variant="ghost" size="sm" onClick={() => setShowCustomTool(false)} className="text-xs text-gray-500 hover:text-gray-700 h-auto py-1 px-2">
+                    Retour liste
+                  </Button>
+                )}
+              </div>
+
+              {showCustomTool ? (
+                <div className="flex gap-2">
+                  <Input
+                    value={customToolName}
+                    onChange={(e) => setCustomToolName(e.target.value)}
+                    placeholder="Nom de l'outil (ex: Photoshop)"
+                    className="dark:bg-gray-800 dark:border-gray-700"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && customToolName.trim()) {
+                        addItem("tools", {
+                          id: `custom-${Date.now()}`,
+                          label: customToolName,
+                          source: 'custom',
+                          imageUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(customToolName)}&background=random&color=fff&size=128`
+                        });
+                        setCustomToolName("");
+                        setShowCustomTool(false);
+                      }
+                    }}
+                  />
+                  <Button
+                    onClick={() => {
+                      if (customToolName.trim()) {
+                        addItem("tools", {
+                          id: `custom-${Date.now()}`,
+                          label: customToolName,
+                          source: 'custom',
+                          imageUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(customToolName)}&background=random&color=fff&size=128`
+                        });
+                        setCustomToolName("");
+                        setShowCustomTool(false);
+                      }
+                    }}
+                    disabled={!customToolName.trim()}
+                    size="icon"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="relative pb-2">
+                  <ToolAutocomplete
+                    onSelect={(tool) =>
+                      addItem("tools", {
+                        id: tool.id,
+                        label: tool.label,
+                        source: 'simpleicons'
+                      })
+                    }
+                  />
+                </div>
+              )}
+              <p className="text-[10px] text-gray-400 dark:text-gray-500 text-center">
+                {showCustomTool ? "Saisissez le nom pour générer une icône." : "Recherchez parmi +3000 icônes dev & design."}
+              </p>
+            </div>
+
           </AccordionContent>
         </AccordionItem>
+
+        {/* RESSOURCES (Liens) */}
+        <AccordionItem value="links" className="border rounded-xl px-4 bg-white/60 dark:bg-black/60 dark:border-gray-800 shadow-sm backdrop-blur-sm">
+          <AccordionTrigger className="hover:no-underline dark:text-gray-100">
+            Ressources
+          </AccordionTrigger>
+          <AccordionContent className="space-y-4 pt-2">
+            {(data.links || []).length === 0 ? (
+              <div className="text-center py-6 text-gray-500 dark:text-gray-400"><p>Aucun lien ajouté</p></div>
+            ) : (
+              (data.links || []).map((link, i) => (
+                <div key={i} className="relative pl-6 border-l-2 border-purple-200 dark:border-purple-900 space-y-3 pb-4 bg-gray-50 dark:bg-gray-900/30 p-4 rounded-lg">
+                  <div className="absolute -left-[9px] top-4 w-4 h-4 rounded-full bg-purple-500 dark:bg-purple-600 flex items-center justify-center shadow-md">
+                    <LinkIcon className="w-2 h-2 text-white" />
+                  </div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">Lien #{i + 1}</span>
+                    <Button variant="ghost" size="icon" onClick={() => removeItem("links", i)} className="text-destructive hover:bg-destructive/10 h-7 w-7">
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  <Input
+                    placeholder="Nom de la ressource (ex: Portfolio)"
+                    value={link.name}
+                    onChange={(e) => updateItem("links", i, "name", e.target.value)}
+                    className="dark:bg-gray-800 dark:border-gray-700 dark:text-white mb-2 font-semibold"
+                  />
+                  <Input
+                    placeholder="URL (ex: https://mon-portfolio.com)"
+                    value={link.url}
+                    onChange={(e) => updateItem("links", i, "url", e.target.value)}
+                    className="dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                  />
+                </div>
+              ))
+            )}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => addItem("links", { name: "", url: "" })}
+              className="w-full border-dashed border-2 hover:bg-purple-50 dark:hover:bg-purple-900/20"
+            >
+              <Plus className="w-4 h-4 mr-2" /> Ajouter un lien
+            </Button>
+          </AccordionContent>
+        </AccordionItem>
+
 
         {/* CERTIFICATS */}
         <AccordionItem value="certifications" className="border rounded-xl px-4 bg-white/60 dark:bg-black/60 dark:border-gray-800 shadow-sm backdrop-blur-sm">

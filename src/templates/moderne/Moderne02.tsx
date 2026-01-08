@@ -1,5 +1,5 @@
 import type { CVData } from "@/types";
-import { formatDateRange } from "@/lib/utils";
+import { formatDateRange, getToolIconUrl } from "@/lib/utils";
 import { PdfSafeWrapper } from "@/components/cv/PdfSafeWrapper";
 
 interface CVTemplateProps {
@@ -90,6 +90,27 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                             </Section>
                         )}
 
+                        {/* Ressources */}
+                        {data.links && data.links.length > 0 && (
+                            <Section title="Ressources">
+                                <ul className="space-y-2">
+                                    {data.links.map((link, i) => (
+                                        <li key={i}>
+                                            <a
+                                                href={link.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 transition-colors"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" /></svg>
+                                                <span className="truncate max-w-[150px]">{link.name}</span>
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </Section>
+                        )}
+
                         <Section title="Références">
                             <div className="grid grid-cols-2 gap-4">
                                 {data.references.map((ref, i) => (
@@ -122,7 +143,13 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                             <Section title="Outils">
                                 <div className="flex flex-wrap gap-2">
                                     {data.tools.map((tool, i) => (
-                                        <span key={i} className="border px-3 py-1 text-xs rounded-md" style={{ backgroundColor: "#ffffff", borderColor: "#e5e7eb", color: "#4b5563" }}>{tool}</span>
+                                        <div key={i} className="border p-1.5 rounded-md bg-white border-gray-200" title={tool.label}>
+                                            <img
+                                                src={getToolIconUrl(tool)}
+                                                alt={tool.label}
+                                                className="w-4 h-4 object-contain"
+                                            />
+                                        </div>
                                     ))}
                                 </div>
                             </Section>

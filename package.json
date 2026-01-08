@@ -27,6 +27,7 @@
     "react-router-dom": "^7.10.1",
     "react-toastify": "^11.0.5",
     "react-typed": "^2.0.12",
+    "simple-icons": "^16.4.0",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.17",
     "yup": "^1.7.1"

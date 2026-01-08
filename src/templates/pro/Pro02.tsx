@@ -1,5 +1,5 @@
 import type { CVData } from "@/types";
-import { formatDateRange } from "@/lib/utils";
+import { formatDateRange, getToolIconUrl } from "@/lib/utils";
 import { PdfSafeWrapper } from "@/components/cv/PdfSafeWrapper";
 
 interface CVTemplateProps {
@@ -60,9 +60,30 @@ export default function CVTemplate({ data }: CVTemplateProps) {
                             <Section title="Outils">
                                 <div className="flex flex-wrap gap-2">
                                     {data.tools.map((tool, i) => (
-                                        <span key={i} className="bg-white dark:bg-slate-800 border dark:border-slate-700 text-gray-600 dark:text-gray-300 px-2 py-1 rounded text-xs font-semibold">{tool}</span>
+                                        <div key={i} className="bg-white dark:bg-slate-800 border dark:border-slate-700 p-1.5 rounded" title={tool.label}>
+                                            <img
+                                                src={getToolIconUrl(tool)}
+                                                alt={tool.label}
+                                                className="w-4 h-4 object-contain"
+                                            />
+                                        </div>
                                     ))}
                                 </div>
+                            </Section>
+                        )}
+
+                        {data.links && data.links.length > 0 && (
+                            <Section title="Ressources">
+                                <ul className="space-y-3">
+                                    {data.links.map((link, i) => (
+                                        <li key={i}>
+                                            <a href={link.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" /></svg>
+                                                <span className="truncate">{link.name}</span>
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
                             </Section>
                         )}
 

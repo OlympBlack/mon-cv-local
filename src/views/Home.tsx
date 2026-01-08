@@ -41,15 +41,7 @@ export default function Home() {
               transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
               className="text-5xl md:text-[55px] md:leading-16 font-bold"
             >
-              <ReactTyped
-                strings={["Faites bonne impression avec votre CV 100% Gratuit"]}
-                typeSpeed={50}
-                backSpeed={30}
-                loop={true}
-                showCursor={true}
-                cursorChar="|"
-                className="inline-block"
-              />
+              Faites bonne impression avec votre CV 100% Gratuit
             </motion.h1>
 
 

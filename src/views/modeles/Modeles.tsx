@@ -22,6 +22,7 @@ import pro01 from "@/assets/images/cv-templates/pro/pro-1.jpg";
 import pro02 from "@/assets/images/cv-templates/pro/pro-2.jpg";
 import pro03 from "@/assets/images/cv-templates/pro/pro-3.jpg";
 
+
 /* =======================
    TYPES
 ======================= */
@@ -105,7 +106,7 @@ export default function Modeles() {
       <div className="relative min-h-screen flex flex-col">
         <Navbar />
 
-        <main className="flex-grow py-24 px-4 max-w-7xl mx-auto space-y-12">
+        <main className="flex-grow py-24 px-4 max-w-7xl mx-auto space-y-12 dark:text-white">
           {/* Header */}
           <div className="text-center space-y-4">
             <motion.h1
