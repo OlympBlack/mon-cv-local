@@ -4,7 +4,9 @@ import Home from "../views/Home";
 import Faq from "../views/Faq";
 import About from "../views/About";
 import Modeles from "../views/modeles/Modeles";
-import ModeleEditor from "../views/modeles/ModeleEditor"; 
+import ModeleEditor from "../views/modeles/ModeleEditor";
+import PrivacyPolicy from "../views/PrivacyPolicy";
+import TermsOfUse from "../views/TermsOfUse";
 
 export interface AppRoute {
     path: string;
@@ -27,6 +29,14 @@ const routes: AppRoute[] = [
     {
         path: "modeles",
         element: <Modeles />,
+    },
+    {
+        path: "privacy-policy",
+        element: <PrivacyPolicy />,
+    },
+    {
+        path: "terms-of-use",
+        element: <TermsOfUse />,
     },
 
     // ROUTE DYNAMIQUE POUR L'ÉDITEUR
