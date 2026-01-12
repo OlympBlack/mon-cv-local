@@ -6,6 +6,7 @@ import ScrollToTopButton from "./components/ui/ScrollToTopButton";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CookieConsent from "./components/CookieConsent";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <ScrollToTop />
       <ScrollToTopButton />
       <ToastContainer position="bottom-right" theme="colored" />
+      <CookieConsent />
       <Routes>
         {routes.map(({ path, element }) => (
           <Route key={path} path={path} element={element} />
